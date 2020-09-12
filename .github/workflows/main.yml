@@ -36,7 +36,7 @@ jobs:
         file-name: '7zip.exe'
 
     - name: Extract Refs
-      run: ./7zip.exe e References.zip -oEasyEvents/libs/ -r -y
+      run: ./7zip.exe e References.zip -oEasyEvents/lib/ -r -y
 
     - name: Build
       run: msbuild EasyEvents.sln -p:Configuration=release
