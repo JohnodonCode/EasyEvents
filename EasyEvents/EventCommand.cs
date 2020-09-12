@@ -18,7 +18,7 @@ namespace EasyEvents
 
             if (sender is PlayerCommandSender player)
             {
-                permission = sender.CheckPermission("easyevents.use");
+                permission = player.CheckPermission("easyevents.use");
             }
             else
             {
@@ -31,15 +31,13 @@ namespace EasyEvents
                 return true;
             }
 
-            var args = arguments.Array;
-
-            if (args == null || args.Length < 1)
+            if (arguments.Array == null || arguments.Array.Length < 2)
             {
                 response = "Usage: event <event name>";
                 return true;
             }
 
-            var command = string.Join(" ", args).Trim().ToLower();
+            var command = arguments.Array[1].Trim().ToLower();
 
             if (!ScriptStore.Scripts.ContainsKey(command))
             {

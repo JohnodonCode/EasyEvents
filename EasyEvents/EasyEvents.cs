@@ -6,7 +6,7 @@ namespace EasyEvents
     public class EasyEvents : Plugin<Config>
     {
         public static EasyEvents Singleton;
-        
+
         public override void OnEnabled()
         {
             base.OnEnabled();
@@ -14,6 +14,8 @@ namespace EasyEvents
             Singleton = this;
 
             ScriptStore.LoadScripts();
+
+            Exiled.Events.Handlers.Server.RestartingRound += EventHandlers.onRoundRestart;
         }
         
         public override void OnDisabled()
@@ -23,6 +25,8 @@ namespace EasyEvents
             Singleton = null;
             
             ScriptActions.RemoveEvents();
+            
+            Exiled.Events.Handlers.Server.RestartingRound -= EventHandlers.onRoundRestart;
         }
     }
 }

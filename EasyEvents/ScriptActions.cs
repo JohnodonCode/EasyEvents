@@ -20,6 +20,7 @@ namespace EasyEvents
             if (customSpawnEvent != null)
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= customSpawnEvent.onRoundStarted;
+                customSpawnEvent = null;
             }
         }
     }
