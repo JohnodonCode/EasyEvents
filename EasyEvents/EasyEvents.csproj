@@ -65,6 +65,9 @@
           <HintPath>..\packages\EXILED.2.1.3\lib\net472\Exiled.Updater.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>lib\Mirror.dll</HintPath>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -74,6 +77,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\Spawn.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="EasyEvents.cs" />
         <Compile Include="EventCommand.cs" />
