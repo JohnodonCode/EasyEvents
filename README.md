@@ -11,7 +11,8 @@ roundlock
 spawn 0,100
 
 //This will turn on the warhead
-detonate```
+detonate
+```
 This text will need to be put in a text file, inside the script directory (which can be found and changed inside the config file). The default directory is inside of the EXILED Config directory, named "EasyEvents" (%APPDATA%\EXILED\Config\EasyEvents on windows).
 
 ## Configuration

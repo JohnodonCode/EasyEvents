@@ -21,6 +21,8 @@ namespace EasyEvents
             base.OnDisabled();
 
             Singleton = null;
+            
+            ScriptActions.RemoveEvents();
         }
     }
 }

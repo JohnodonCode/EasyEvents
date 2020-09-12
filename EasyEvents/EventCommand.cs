@@ -18,7 +18,7 @@ namespace EasyEvents
 
             if (sender is PlayerCommandSender player)
             {
-
+                permission = sender.CheckPermission("easyevents.use");
             }
             else
             {
@@ -39,7 +39,7 @@ namespace EasyEvents
                 return true;
             }
 
-            var command = String.Join(" ", args).Trim().ToLower();
+            var command = string.Join(" ", args).Trim().ToLower();
 
             if (!ScriptStore.Scripts.ContainsKey(command))
             {
@@ -68,7 +68,6 @@ namespace EasyEvents
 
         public string Command => "event";
         public string[] Aliases => new string[] {"runevent", "eventrun" };
-
-    public string Description => "This is the command used to run custom events with EasyEvents.";
+        public string Description => "This is the command used to run custom events with EasyEvents.";
     }
 }

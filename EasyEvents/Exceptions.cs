@@ -34,4 +34,15 @@ namespace EasyEvents
         protected InvalidCommandException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+    
+    [Serializable()]
+    public class CommandErrorException : System.Exception
+    {
+        public CommandErrorException() : base() { }
+        public CommandErrorException(string message) : base(message) { }
+        public CommandErrorException(string message, System.Exception inner) : base(message, inner) { }
+        
+        protected CommandErrorException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }
