@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EasyEvents
@@ -7,15 +8,17 @@ namespace EasyEvents
     {
         public static void RunScript(string inputText)
         {
-            var arr = inputText.Split('\n');
+            var arr = inputText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             
             for (var i = 0; i < arr.Length; i++)
             {
                 var s = arr[i];
                 
-                var cmd = s.Split(' ')[0].ToLower();
-                var args = s.Split(' ').ToList();
+                var cmd = s.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[0].Trim().ToLower();
+                var args = s.Split(new char[0], StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (args.Count > 0) args.RemoveAt(0);
+                
+                if (cmd.StartsWith("#") || cmd.StartsWith("//") || cmd == string.Empty) continue;
 
                 switch (cmd)
                 {
@@ -55,7 +58,7 @@ namespace EasyEvents
                         if(sum > 100) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances should never exceed 100. Got "+sum+".");
                         if(sum < 100 && finalClassId == -1) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances shouldn't be less than 100 unless you have set a class to use for the remaining players. Got "+sum+".");
                         
-                        ScriptActions.setCustomSpawn(classIds, finalClassId);
+                        ScriptActions.SetCustomSpawn(classIds, finalClassId);
                         break;
                 }
             }

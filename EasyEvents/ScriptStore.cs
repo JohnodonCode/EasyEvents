@@ -5,7 +5,7 @@ using Exiled.API.Features;
 
 namespace EasyEvents
 {
-    public class ScriptStore
+    public static class ScriptStore
     {
         public static Dictionary<string, string> Scripts = new Dictionary<string, string>();
 
