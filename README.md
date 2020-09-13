@@ -1,5 +1,5 @@
 # EasyEvents
-EasyEvents is a plugin to let you easily create simple-to-use and powerful events for your server. It works by letting you create event scripts/profiles. These scripts are lists of simple commands that will modify the game. For example, you can change the spawn rates for certain roles, detonate the warhead, teleport roles to certain locations, and more. EasyEvents aims to automate all of the work that goes into running events, and allows you to create events that would be difficult to do manually.
+EasyEvents is a plugin to let you easily create simple-to-use and powerful events for your server. It works by letting you create event scripts/profiles. These scripts are lists of simple commands that will modify the game. For example, you can change the spawn rates for certain roles, detonate the warhead, teleport roles to certain locations, and more. EasyEvents aims to automate all of the work that goes into running events, and allows you to create events that would be difficult to do manually. To learn how to create custom events, check out the [Wiki](https://github.com/PintTheDragon/EasyEvents/wiki).
 
 ## Example
 Here is an example of what a EasyEvent script for the event "Peanut Run" might look like:
@@ -14,6 +14,8 @@ spawn 0,100
 detonate
 ```
 This text will need to be put in a text file, inside the script directory (which can be found and changed inside the config file). The default directory is inside of the EXILED Config directory, named "EasyEvents" (%APPDATA%\EXILED\Config\EasyEvents on windows).
+
+You can also check out the [Wiki](https://github.com/PintTheDragon/EasyEvents/wiki) for more information on creating events.
 
 ## Configuration
 The above section goes into more detail on how to setup scripts. To configure EasyEvents, you can go into EXILED's config file. Currently, you will only be able to change the script directory.
