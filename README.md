@@ -19,4 +19,4 @@ This text will need to be put in a text file, inside the script directory (which
 The above section goes into more detail on how to setup scripts. To configure EasyEvents, you can go into EXILED's config file. Currently, you will only be able to change the script directory.
 
 ## Usage
-To use EasyEvents, first setup a script. Then you can use the script's name (if your script is named "peanutrun.txt", this will be "peanutrun") in the "events" command. Simply go into the RemoteAdmin console, then type "event <event name>", replacing "<event name>" with the name of the script. Note that events can only be ran before the round is started.
+To use EasyEvents, first setup a script. Then you can use the script's name (if your script is named "peanutrun.txt", this will be "peanutrun") in the "events" command. Simply go into the RemoteAdmin console, then type "event &lt;event name&gt;", replacing "&lt;event name&gt;" with the name of the script. Note that events can only be ran before the round is started.
