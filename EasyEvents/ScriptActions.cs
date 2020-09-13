@@ -13,24 +13,22 @@ namespace EasyEvents
         public static bool eventRan = false;
         
         private static List<SpawnData> classIds = null;
-        private static int finalClassId = -1;
-        private static CustomRole finalClassRole = null;
+        private static RoleInfo finalClass = null;
 
         private static List<TeleportData> teleportIds = null;
 
         public static bool detonate = false;
 
-        public static List<ClearItemsData> clearItems = new List<ClearItemsData>();
+        public static List<RoleInfo> clearItems = new List<RoleInfo>();
         
         public static List<GiveData> giveData = new List<GiveData>();
         
-        public static void SetCustomSpawn(List<SpawnData> _classIds, int _finalClassId, CustomRole _finalClassRole, int line)
+        public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
             classIds = _classIds;
-            finalClassId = _finalClassId;
-            finalClassRole = _finalClassRole;
+            finalClass = _finalClass;
         }
 
         public static void SetTeleport(List<TeleportData> _teleportIds, int line)
@@ -49,13 +47,12 @@ namespace EasyEvents
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             classIds = null;
-            finalClassId = -1;
             teleportIds = null;
             detonate = false;
             eventRan = false;
             CustomRoles.roles = new Dictionary<string, CustomRole>();
-            finalClassRole = null;
-            clearItems = new List<ClearItemsData>();
+            finalClass = null;
+            clearItems = new List<RoleInfo>();
             giveData = new List<GiveData>();
         }
         
@@ -100,26 +97,26 @@ namespace EasyEvents
                 {
                     if ((i != 0) && (i * data.chance / 100) <= ((i - 1) * data.chance / 100)) continue;
                     
-                    players[i].SetRole((RoleType) data.classId);
-                    data.role?.members.Add(players[i]);
+                    players[i].SetRole((RoleType) data.role.classId);
+                    data.role.role?.members.Add(players[i]);
                     players.RemoveAt(i);
                 }
                 
                 players.Shuffle();
             }
 
-            if (players.Count > 0 && finalClassId != -1)
+            if (players.Count > 0 && finalClass.classId != -1)
             {
-                var role = (RoleType) finalClassId;
+                var role = (RoleType) finalClass.classId;
                 
                 foreach (var player in players)
                 {
                     player.SetRole(role);
                 }
 
-                if (finalClassRole != null)
+                if (finalClass.role != null)
                 {
-                    finalClassRole.members = players;
+                    finalClass.role.members = players;
                 }
             }
         }
@@ -132,9 +129,8 @@ namespace EasyEvents
                 {
                     throw new EventRunErrorException("No safe position could be found for door \""+data.door.DoorName+"\".");
                 }
-
-                var role = (RoleType) data.classId;
-                var players = data.role == null ? Player.List.Where(player => player.Role == role).ToList() : data.role.members;
+                
+                var players = data.role.GetMembers();
                 
                 foreach (var player in players)
                 {
@@ -147,7 +143,7 @@ namespace EasyEvents
         {
             foreach (var clearItemsData in clearItems)
             {
-                var list = clearItemsData.role == null ? Player.List.Where(player => player.Role == (RoleType) clearItemsData.classId).ToList() : clearItemsData.role.members;
+                var list = clearItemsData.GetMembers();
 
                 foreach (var player in list)
                 {

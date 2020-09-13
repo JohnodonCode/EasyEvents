@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Features;
 
 namespace EasyEvents
 {
@@ -30,6 +33,11 @@ namespace EasyEvents
             }
             
             return new RoleInfo(role, classId);
+        }
+
+        public List<Player> GetMembers()
+        {
+            return this.role == null ? Player.List.Where(player => player.Role == (RoleType) this.classId).ToList() : this.role.members;
         }
     }
 }

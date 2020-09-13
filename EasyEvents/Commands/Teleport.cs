@@ -27,7 +27,7 @@ namespace EasyEvents.Commands
                 
                 if(door == null) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". The door name specified is not valid.");
                 
-                teleports.Add(new TeleportData(classId, door, customRole));
+                teleports.Add(new TeleportData(door, new RoleInfo(customRole, classId)));
             }
             
             ScriptActions.SetTeleport(teleports, i);

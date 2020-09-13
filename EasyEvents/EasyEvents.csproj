@@ -94,7 +94,6 @@
         <Compile Include="ScriptActions.cs" />
         <Compile Include="ScriptHandler.cs" />
         <Compile Include="ScriptStore.cs" />
-        <Compile Include="Types\ClearItemsData.cs" />
         <Compile Include="Types\GiveData.cs" />
         <Compile Include="Types\SpawnData.cs" />
         <Compile Include="Types\TeleportData.cs" />

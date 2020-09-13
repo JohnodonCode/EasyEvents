@@ -13,7 +13,7 @@ namespace EasyEvents.Commands
             
             var roleInfo = RoleInfo.parseRole(args[0], "clearitems", i, 0);
             
-            ScriptActions.clearItems.Add(new ClearItemsData(roleInfo.role, roleInfo.classId));
+            ScriptActions.clearItems.Add(new RoleInfo(roleInfo.role, roleInfo.classId));
         }
     }
 }

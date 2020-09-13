@@ -45,7 +45,7 @@ namespace EasyEvents.Commands
                     if(classId < 0 || classId > 17 || chance < 0 || chance > 100) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
 
                     sum += chance;
-                    classIds.Add(new SpawnData(classId, chance, role));
+                    classIds.Add(new SpawnData(chance, new RoleInfo(role, classId)));
                 }
                 else throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
             }
@@ -53,7 +53,7 @@ namespace EasyEvents.Commands
             if(sum > 100) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances should never exceed 100. Got "+sum+".");
             if(sum < 100 && finalClassId == -1) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances shouldn't be less than 100 unless you have set a class to use for the remaining players. Got "+sum+".");
                         
-            ScriptActions.SetCustomSpawn(classIds, finalClassId, finalClassRole, i);
+            ScriptActions.SetCustomSpawn(classIds, new RoleInfo(finalClassRole, finalClassId), i);
         }
     }
 }

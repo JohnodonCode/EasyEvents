@@ -4,13 +4,11 @@ namespace EasyEvents.Types
 {
     public class TeleportData
     {
-        public int classId = -1;
-        public Door door = null;
-        public CustomRole role = null;
+        public Door door;
+        public RoleInfo role;
 
-        public TeleportData(int c, Door d, CustomRole r)
+        public TeleportData(Door d, RoleInfo r)
         {
-            classId = c;
             door = d;
             role = r;
         }
