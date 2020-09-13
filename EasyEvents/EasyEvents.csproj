@@ -78,16 +78,17 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Commands\Spawn.cs" />
+        <Compile Include="Commands\Teleport.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="EasyEvents.cs" />
         <Compile Include="EventCommand.cs" />
         <Compile Include="EventHandlers.cs" />
-        <Compile Include="Events\RoundStarted.cs" />
         <Compile Include="Exceptions.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="ScriptActions.cs" />
         <Compile Include="ScriptHandler.cs" />
         <Compile Include="ScriptStore.cs" />
+        <Compile Include="Types\TeleportData.cs" />
         <Compile Include="Util.cs" />
     </ItemGroup>
     <ItemGroup>

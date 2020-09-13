@@ -17,22 +17,17 @@ namespace EasyEvents
         public override void OnEnabled()
         {
             base.OnEnabled();
-
             Singleton = this;
-
             ScriptStore.LoadScripts();
-
+            ScriptActions.AddEvents();
             Exiled.Events.Handlers.Server.RestartingRound += EventHandlers.onRoundRestart;
         }
         
         public override void OnDisabled()
         {
             base.OnDisabled();
-
             Singleton = null;
-            
             ScriptActions.RemoveEvents();
-            
             Exiled.Events.Handlers.Server.RestartingRound -= EventHandlers.onRoundRestart;
         }
     }

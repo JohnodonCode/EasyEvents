@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
 using CommandSystem;
-using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
-using MEC;
 using RemoteAdmin;
-using UnityEngine;
 
 namespace EasyEvents
 {
@@ -51,10 +47,23 @@ namespace EasyEvents
                 return true;
             }
 
+            if (Exiled.API.Features.Round.IsStarted)
+            {
+                response = "Events can only be ran before the round is started.";
+                return true;
+            }
+
+            if (ScriptActions.eventRan)
+            {
+                response = "Only one event can be ran per round. Restart the round to run this event.";
+                return true;
+            }
+
             try
             {
                 ScriptHandler.RunScript(text);
                 response = "Event \"" + command + "\" started successfully";
+                ScriptActions.eventRan = true;
                 return true;
             }
             catch (Exception e)
@@ -65,7 +74,7 @@ namespace EasyEvents
         }
 
         public string Command => "event";
-        public string[] Aliases => new string[] {"runevent", "eventrun" };
+        public string[] Aliases => new string[] {"runevent", "eventrun", "events" };
         public string Description => "This is the command used to run custom events with EasyEvents.";
     }
 }

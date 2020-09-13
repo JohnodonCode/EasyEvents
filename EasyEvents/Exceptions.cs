@@ -45,4 +45,15 @@ namespace EasyEvents
         protected CommandErrorException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+    
+    [Serializable()]
+    public class EventRunErrorException : System.Exception
+    {
+        public EventRunErrorException() : base() { }
+        public EventRunErrorException(string message) : base(message) { }
+        public EventRunErrorException(string message, System.Exception inner) : base(message, inner) { }
+        
+        protected EventRunErrorException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

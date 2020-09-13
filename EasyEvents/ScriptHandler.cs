@@ -32,7 +32,11 @@ namespace EasyEvents
                         break;
                     
                     case "detonate":
-                        AlphaWarheadController.Host.StartDetonation();
+                        ScriptActions.detonate = true;
+                        break;
+                    
+                    case "teleport":
+                        Teleport.Run(args, i);
                         break;
                     
                     default:
