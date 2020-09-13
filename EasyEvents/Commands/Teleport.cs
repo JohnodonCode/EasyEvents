@@ -18,13 +18,24 @@ namespace EasyEvents.Commands
                 
                 if(argEls.Length < 2) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". Expected \"(0-17),DOOR_NAME\" but got \""+args[y]+"\".");
 
-                if(!int.TryParse(argEls[0], out var classId)) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". Expected \"(0-17),DOOR_NAME\" but got \""+args[y]+"\".");
-                
+                var classId = -1;
+                CustomRole customRole = null;
+
+                if (argEls[0].Trim().ToLower().StartsWith("g:") && CustomRoles.roles.ContainsKey(argEls[0].Trim().ToLower()))
+                {
+                    if(!CustomRoles.roles.TryGetValue(argEls[0].Trim().ToLower(), out customRole)) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". Expected \"(0-17),DOOR_NAME\" but got \""+args[y]+"\".");
+                    classId = customRole.classId;
+                }
+                else
+                {
+                    if(!int.TryParse(argEls[0].Trim(), out classId)) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". Expected \"(0-17),DOOR_NAME\" but got \""+args[y]+"\".");
+                }
+
                 var door = UnityEngine.Object.FindObjectsOfType<Door>().FirstOrDefault(_door => _door.DoorName.Trim().ToUpper() == argEls[1].Trim().ToUpper());
                 
                 if(door == null) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument "+y+". The door name specified is not valid.");
                 
-                teleports.Add(new TeleportData(classId, door));
+                teleports.Add(new TeleportData(classId, door, customRole));
             }
             
             ScriptActions.SetTeleport(teleports, i);

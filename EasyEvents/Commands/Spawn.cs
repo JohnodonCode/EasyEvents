@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EasyEvents.Types;
 
 namespace EasyEvents.Commands
 {
@@ -10,7 +11,7 @@ namespace EasyEvents.Commands
 
             var finalClassId = -1;
             var sum = 0;
-            var classIds = new List<int[]>();
+            var classIds = new List<SpawnData>();
 
             for (var y = 0; y < args.Count; y++)
             {
@@ -22,18 +23,41 @@ namespace EasyEvents.Commands
                 {
                     if (y != args.Count - 1 || finalClassId != -1) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
 
-                    if(!int.TryParse(argEls[0], out var classId)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17)\" but got \""+args[y]+"\".");
+                    var classId = -1;
+
+                    if (argEls[0].Trim().ToLower().StartsWith("g:") && CustomRoles.roles.ContainsKey(argEls[0].Trim().ToLower()))
+                    {
+                        if(!CustomRoles.roles.TryGetValue(argEls[0].Trim().ToLower(), out var role)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17)\" but got \""+args[y]+"\".");
+                        classId = role.classId;
+                    }
+                    else
+                    {
+                        if(!int.TryParse(argEls[0].Trim(), out classId)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17)\" but got \""+args[y]+"\".");
+                    }
+                    
                     if(classId < 0 || classId > 17) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
 
                     finalClassId = classId;
                 }
                 else if (argEls.Length == 2)
                 {
-                    if(!int.TryParse(argEls[0], out var classId) || !int.TryParse(argEls[1], out var chance)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
+                    var classId = -1;
+                    CustomRole role = null;
+
+                    if (argEls[0].Trim().ToLower().StartsWith("g:") && CustomRoles.roles.ContainsKey(argEls[0].Trim().ToLower()))
+                    {
+                        if(!CustomRoles.roles.TryGetValue(argEls[0].Trim().ToLower(), out role)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17)\" but got \""+args[y]+"\".");
+                        classId = role.classId;
+                    }
+                    else
+                    {
+                        if(!int.TryParse(argEls[0].Trim(), out classId)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17)\" but got \""+args[y]+"\".");
+                    }
+                    if(!int.TryParse(argEls[1], out var chance)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
                     if(classId < 0 || classId > 17 || chance < 0 || chance > 100) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
 
                     sum += chance;
-                    classIds.Add(new int[] {classId, chance});
+                    classIds.Add(new SpawnData(classId, chance, role));
                 }
                 else throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
             }

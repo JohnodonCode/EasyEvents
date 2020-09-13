@@ -12,14 +12,14 @@ namespace EasyEvents
     {
         public static bool eventRan = false;
         
-        private static List<int[]> classIds = null;
+        private static List<SpawnData> classIds = null;
         private static int finalClassId = -1;
 
         private static List<TeleportData> teleportIds = null;
 
         public static bool detonate = false;
         
-        public static void SetCustomSpawn(List<int[]> _classIds, int _finalClassId, int line)
+        public static void SetCustomSpawn(List<SpawnData> _classIds, int _finalClassId, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
@@ -47,6 +47,7 @@ namespace EasyEvents
             teleportIds = null;
             detonate = false;
             eventRan = false;
+            CustomRoles.roles = new Dictionary<string, CustomRole>();
         }
         
         private static void OnRoundStarted()
@@ -80,16 +81,15 @@ namespace EasyEvents
             var players = Player.List.ToList();
             players.Shuffle();
             
-            foreach (var classId in classIds)
+            foreach (var data in classIds)
             {
-                var role = (RoleType) classId[0];
-                var percent = classId[1];
-                
+
                 for (var i = 0; i < players.Count; i++)
                 {
-                    if ((i != 0) && (i * percent / 100) <= ((i - 1) * percent / 100)) continue;
+                    if ((i != 0) && (i * data.chance / 100) <= ((i - 1) * data.chance / 100)) continue;
                     
-                    players[i].SetRole(role);
+                    players[i].SetRole((RoleType) data.classId);
+                    data.role?.members.Add(players[i]);
                     players.RemoveAt(i);
                 }
                 
@@ -117,7 +117,7 @@ namespace EasyEvents
                 }
 
                 var role = (RoleType) data.classId;
-                var players = Player.List.Where(player => player.Role == role).ToList();
+                var players = data.role == null ? Player.List.Where(player => player.Role == role).ToList() : data.role.members;
                 
                 foreach (var player in players)
                 {

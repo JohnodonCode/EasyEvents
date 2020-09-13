@@ -39,6 +39,10 @@ namespace EasyEvents
                         Teleport.Run(args, i);
                         break;
                     
+                    case "createclass":
+                        CreateClass.Run(args, i);
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;
