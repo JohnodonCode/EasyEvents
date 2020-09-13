@@ -47,6 +47,10 @@ namespace EasyEvents
                         ClearItems.Run(args, i);
                         break;
                     
+                    case "give":
+                        Give.Run(args, i);
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;

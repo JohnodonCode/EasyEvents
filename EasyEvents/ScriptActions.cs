@@ -22,6 +22,8 @@ namespace EasyEvents
 
         public static List<ClearItemsData> clearItems = new List<ClearItemsData>();
         
+        public static List<GiveData> giveData = new List<GiveData>();
+        
         public static void SetCustomSpawn(List<SpawnData> _classIds, int _finalClassId, CustomRole _finalClassRole, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
@@ -54,6 +56,7 @@ namespace EasyEvents
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             finalClassRole = null;
             clearItems = new List<ClearItemsData>();
+            giveData = new List<GiveData>();
         }
         
         private static void OnRoundStarted()
@@ -72,6 +75,7 @@ namespace EasyEvents
             }
             
             ClearItems();
+            GiveItems();
 
             if (teleportIds != null)
             {
@@ -148,6 +152,19 @@ namespace EasyEvents
                 foreach (var player in list)
                 {
                     player.ClearInventory();
+                }
+            }
+        }
+
+        private static void GiveItems()
+        {
+            foreach (var itemData in giveData)
+            {
+                var list = itemData.role.role == null ? Player.List.Where(player => player.Role == (RoleType) itemData.role.classId).ToList() : itemData.role.role.members;
+
+                foreach (var player in list)
+                {
+                    player.Inventory.AddNewItem(itemData.item);
                 }
             }
         }

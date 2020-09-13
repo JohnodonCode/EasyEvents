@@ -79,6 +79,7 @@
     <ItemGroup>
         <Compile Include="Commands\ClearItems.cs" />
         <Compile Include="Commands\CreateClass.cs" />
+        <Compile Include="Commands\Give.cs" />
         <Compile Include="Commands\Spawn.cs" />
         <Compile Include="Commands\Teleport.cs" />
         <Compile Include="Config.cs" />
@@ -89,10 +90,12 @@
         <Compile Include="EventHandlers.cs" />
         <Compile Include="Exceptions.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="RoleInfo.cs" />
         <Compile Include="ScriptActions.cs" />
         <Compile Include="ScriptHandler.cs" />
         <Compile Include="ScriptStore.cs" />
         <Compile Include="Types\ClearItemsData.cs" />
+        <Compile Include="Types\GiveData.cs" />
         <Compile Include="Types\SpawnData.cs" />
         <Compile Include="Types\TeleportData.cs" />
         <Compile Include="Util.cs" />

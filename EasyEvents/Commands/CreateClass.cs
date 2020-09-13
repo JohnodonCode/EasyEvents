@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EasyEvents.Commands
 {
@@ -10,7 +11,9 @@ namespace EasyEvents.Commands
 
             var customId = "g:"+args[0].Trim().ToLower();
 
-            if(!int.TryParse(args[1].Trim(), out var classId)) throw new InvalidArgumentException("Invalid argument for command \"createclass\" on line "+i+", argument 1. Expected \"(0-17)\" but got \""+args[1]+"\".");
+            var roleInfo = RoleInfo.parseRole(args[1], "createclass", i, 1);
+            var classId = (int) roleInfo.classId;
+            
             if(classId < 0 || classId > 17) throw new InvalidArgumentException("Invalid argument for command \"createclass\" on line "+i+", argument 1. Expected \"(0-17)\" but got \""+args[1]+"\".");
             
             CustomRoles.roles.Add(customId, new CustomRole(customId, classId));
