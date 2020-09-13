@@ -14,17 +14,21 @@ namespace EasyEvents
         
         private static List<SpawnData> classIds = null;
         private static int finalClassId = -1;
+        private static CustomRole finalClassRole = null;
 
         private static List<TeleportData> teleportIds = null;
 
         public static bool detonate = false;
+
+        public static List<ClearItemsData> clearItems = new List<ClearItemsData>();
         
-        public static void SetCustomSpawn(List<SpawnData> _classIds, int _finalClassId, int line)
+        public static void SetCustomSpawn(List<SpawnData> _classIds, int _finalClassId, CustomRole _finalClassRole, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
             classIds = _classIds;
             finalClassId = _finalClassId;
+            finalClassRole = _finalClassRole;
         }
 
         public static void SetTeleport(List<TeleportData> _teleportIds, int line)
@@ -48,6 +52,8 @@ namespace EasyEvents
             detonate = false;
             eventRan = false;
             CustomRoles.roles = new Dictionary<string, CustomRole>();
+            finalClassRole = null;
+            clearItems = new List<ClearItemsData>();
         }
         
         private static void OnRoundStarted()
@@ -64,6 +70,8 @@ namespace EasyEvents
                 SetRoles();
                 yield return Timing.WaitForSeconds(1f);
             }
+            
+            ClearItems();
 
             if (teleportIds != null)
             {
@@ -104,6 +112,11 @@ namespace EasyEvents
                 {
                     player.SetRole(role);
                 }
+
+                if (finalClassRole != null)
+                {
+                    finalClassRole.members = players;
+                }
             }
         }
 
@@ -122,6 +135,19 @@ namespace EasyEvents
                 foreach (var player in players)
                 {
                     player.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+                }
+            }
+        }
+
+        private static void ClearItems()
+        {
+            foreach (var clearItemsData in clearItems)
+            {
+                var list = clearItemsData.role == null ? Player.List.Where(player => player.Role == (RoleType) clearItemsData.classId).ToList() : clearItemsData.role.members;
+
+                foreach (var player in list)
+                {
+                    player.ClearInventory();
                 }
             }
         }

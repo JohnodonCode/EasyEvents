@@ -77,6 +77,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\ClearItems.cs" />
         <Compile Include="Commands\CreateClass.cs" />
         <Compile Include="Commands\Spawn.cs" />
         <Compile Include="Commands\Teleport.cs" />
@@ -91,6 +92,7 @@
         <Compile Include="ScriptActions.cs" />
         <Compile Include="ScriptHandler.cs" />
         <Compile Include="ScriptStore.cs" />
+        <Compile Include="Types\ClearItemsData.cs" />
         <Compile Include="Types\SpawnData.cs" />
         <Compile Include="Types\TeleportData.cs" />
         <Compile Include="Util.cs" />
