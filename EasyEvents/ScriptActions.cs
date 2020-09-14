@@ -7,11 +7,14 @@ using EasyEvents.Types;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
+using Random = System.Random;
 
 namespace EasyEvents
 {
     public static class ScriptActions
     {
+        private static Random random = new Random();
+        
         public static bool eventRan = false;
         
         private static List<SpawnData> classIds = null;
@@ -155,14 +158,16 @@ namespace EasyEvents
             
             foreach (var data in classIds)
             {
-
+                var num = 0;
+                
                 for (var i = 0; i < players.Count; i++)
                 {
-                    if ((i != 0) && (i * data.chance / 100) <= ((i - 1) * data.chance / 100)) continue;
+                    if (random.Next(0, 101) > data.chance && num > data.min) continue;
                     
                     players[i].SetRole(data.role.GetRole());
                     CustomRoles.ChangeRole(players[i], data.role.GetCustomRole());
                     players.RemoveAt(i);
+                    num++;
                 }
                 
                 players.Shuffle();
