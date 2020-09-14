@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
 using MEC;
+using UnityEngine;
 
 namespace EasyEvents
 {
@@ -81,21 +82,29 @@ namespace EasyEvents
             {
                 if ((RoleType) data.originalRole.classId == newRole)
                 {
+                    Vector3 oldPos = p.Position;
+                    
                     p.SetRole((RoleType) data.newRole.classId);
-                    
-                    foreach (var teleportdata in teleportIds)
-                    {
-                        if(teleportdata.role.role != null && data.newRole.role != null && teleportdata.role.role != data.newRole.role) continue;
-                        if (teleportdata.role.classId != data.newRole.classId) continue;
 
-                        if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
-                        {
-                            throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
-                        }
-                        
-                        p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
-                    }
+                    yield return Timing.WaitForSeconds(1f);
                     
+                    if(data.soft) p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(oldPos, 0f, false);
+                    else
+                    {
+                        foreach (var teleportdata in teleportIds)
+                        {
+                            if(teleportdata.role.role != null && data.newRole.role != null && teleportdata.role.role != data.newRole.role) continue;
+                            if (teleportdata.role.classId != data.newRole.classId) continue;
+
+                            if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
+                            {
+                                throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
+                            }
+                        
+                            p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+                        }
+                    }
+
                     foreach (var clearItemsData in clearItems)
                     {
                         if(clearItemsData.role != null && data.newRole.role != null && clearItemsData.role != data.newRole.role) continue;
