@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EasyEvents.Commands;
+using System.Security.Claims;
+using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
 using MEC;
@@ -22,6 +23,8 @@ namespace EasyEvents
         public static List<RoleInfo> clearItems = new List<RoleInfo>();
         
         public static List<GiveData> giveData = new List<GiveData>();
+
+        public static List<InfectData> infectData = new List<InfectData>();
         
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
         {
@@ -41,6 +44,7 @@ namespace EasyEvents
         public static void AddEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
         }
 
         public static void RemoveEvents()
@@ -54,11 +58,61 @@ namespace EasyEvents
             finalClass = null;
             clearItems = new List<RoleInfo>();
             giveData = new List<GiveData>();
+            infectData = new List<InfectData>();
         }
         
         private static void OnRoundStarted()
         { 
             Timing.RunCoroutine(RoundStart());
+        }
+
+        private static void OnRoleChange(ChangingRoleEventArgs ev)
+        {
+            if (ev.Player.Role == RoleType.Spectator) return;
+            
+            Timing.RunCoroutine(Infect(ev.NewRole, ev.Player));
+        }
+
+        private static IEnumerator<float> Infect(RoleType newRole, Player p)
+        {
+            yield return Timing.WaitForSeconds(1f);
+
+            foreach (var data in infectData)
+            {
+                if ((RoleType) data.originalRole.classId == newRole)
+                {
+                    p.SetRole((RoleType) data.newRole.classId);
+                    
+                    foreach (var teleportdata in teleportIds)
+                    {
+                        if(teleportdata.role.role != null && data.newRole.role != null && teleportdata.role.role != data.newRole.role) continue;
+                        if (teleportdata.role.classId != data.newRole.classId) continue;
+
+                        if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
+                        {
+                            throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
+                        }
+                        
+                        p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+                    }
+                    
+                    foreach (var clearItemsData in clearItems)
+                    {
+                        if(clearItemsData.role != null && data.newRole.role != null && clearItemsData.role != data.newRole.role) continue;
+                        if (clearItemsData.classId != data.newRole.classId) continue;
+                        
+                        p.ClearInventory();
+                    }
+                    
+                    foreach (var itemData in giveData)
+                    {
+                        if(itemData.role.role != null && data.newRole.role != null && itemData.role.role != data.newRole.role) continue;
+                        if (itemData.role.classId != data.newRole.classId) continue;
+
+                        p.Inventory.AddNewItem(itemData.item);
+                    }
+                }
+            }
         }
         
         private static IEnumerator<float> RoundStart()
@@ -156,7 +210,7 @@ namespace EasyEvents
         {
             foreach (var itemData in giveData)
             {
-                var list = itemData.role.role == null ? Player.List.Where(player => player.Role == (RoleType) itemData.role.classId).ToList() : itemData.role.role.members;
+                var list = itemData.role.GetMembers();
 
                 foreach (var player in list)
                 {
