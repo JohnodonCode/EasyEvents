@@ -21,7 +21,7 @@ namespace EasyEvents.Commands
 
                 var roleInfo = RoleInfo.parseRole(argEls[0], "teleport", i, y);
                 var classId = roleInfo.classId;
-                CustomRole customRole = roleInfo.role;
+                string customRole = roleInfo.roleID;
 
                 var door = UnityEngine.Object.FindObjectsOfType<Door>().FirstOrDefault(_door => _door.DoorName.Trim().ToUpper() == argEls[1].Trim().ToUpper());
                 

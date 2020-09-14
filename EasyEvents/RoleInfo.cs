@@ -7,13 +7,21 @@ namespace EasyEvents
 {
     public class RoleInfo
     {
-        public CustomRole role;
+        public string roleID;
         public int classId;
 
-        public RoleInfo(CustomRole role, int classId)
+        public RoleInfo(string roleID, int classId)
         {
-            this.role = role;
+            this.roleID = roleID;
             this.classId = classId;
+        }
+
+        public CustomRole GetCustomRole()
+        {
+            if (roleID == null) return null;
+            if (!CustomRoles.roles.ContainsKey(roleID)) return null;
+            if (!CustomRoles.roles.TryGetValue(roleID, out var role)) return null;
+            return role;
         }
 
         public static RoleInfo parseRole(string arg, string cmd, int line, int argNum)
@@ -32,18 +40,18 @@ namespace EasyEvents
                 classId = (int) roleId;
             }
             
-            return new RoleInfo(role, classId);
+            return new RoleInfo(role?.id, classId);
         }
 
         public List<Player> GetMembers()
         {
-            return this.role == null ? Player.List.Where(player => player.Role == (RoleType) this.classId).ToList() : this.role.members;
+            return this.GetCustomRole() == null ? Player.List.Where(player => player.Role == (RoleType) this.classId).ToList() : this.GetCustomRole().GetMembers();
         }
 
         public bool Equals(RoleInfo other)
         {
-            if (this.role == null && other.role == null && other.classId == this.classId) return true;
-            return this.role == other.role;
+            if (this.GetCustomRole() == null && other.GetCustomRole() == null && other.classId == this.classId) return true;
+            return this.roleID == other.roleID;
         }
 
         public RoleType GetRole()

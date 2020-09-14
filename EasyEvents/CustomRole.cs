@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using System.Linq;
 
 namespace EasyEvents
 {
     public class CustomRole
     {
-        public List<Player> members = new List<Player>();
+        public List<string> members = new List<string>();
         public string id = null;
         public int classId = -1;
         
@@ -13,6 +14,11 @@ namespace EasyEvents
         {
             this.id = id;
             this.classId = classId;
+        }
+
+        public List<Player> GetMembers()
+        {
+            return Player.List.Where(p => members.Contains(p.UserId)).ToList();
         }
     }
 }

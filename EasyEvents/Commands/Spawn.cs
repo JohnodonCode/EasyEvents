@@ -11,7 +11,7 @@ namespace EasyEvents.Commands
             if (args.Count < 1) throw new InvalidArgumentLengthException("Expected 1 argument but got 0 for command \"spawn\" at line "+i+".");
 
             var finalClassId = -1;
-            CustomRole finalClassRole = null;
+            string finalClassRole = null;
             var sum = 0;
             var classIds = new List<SpawnData>();
 
@@ -29,7 +29,7 @@ namespace EasyEvents.Commands
 
                     var roleInfo = RoleInfo.parseRole(argEls[0], "spawn", i, y);
                     classId = roleInfo.classId;
-                    finalClassRole = roleInfo.role;
+                    finalClassRole = roleInfo.roleID;
                     
                     if(classId < 0 || classId > 17) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
 
@@ -39,7 +39,7 @@ namespace EasyEvents.Commands
                 {
                     var roleInfo = RoleInfo.parseRole(argEls[0], "spawn", i, y);
                     var classId = roleInfo.classId;
-                    CustomRole role = roleInfo.role;
+                    string role = roleInfo.roleID;
                     
                     if(!int.TryParse(argEls[1], out var chance)) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");
                     if(classId < 0 || classId > 17 || chance < 0 || chance > 100) throw new InvalidArgumentException("Invalid argument for command \"spawn\" on line "+i+", argument "+y+". Expected \"(0-17),(0-100)\" but got \""+args[y]+"\".");

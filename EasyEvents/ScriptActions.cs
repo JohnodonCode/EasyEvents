@@ -57,7 +57,7 @@ namespace EasyEvents
             detonate = false;
             eventRan = false;
             CustomRoles.roles = new Dictionary<string, CustomRole>();
-            CustomRoles.users = new Dictionary<string, CustomRole>();
+            CustomRoles.users = new Dictionary<string, string>();
             finalClass = null;
             clearItems = new List<RoleInfo>();
             giveData = new List<GiveData>();
@@ -88,10 +88,7 @@ namespace EasyEvents
                     
                 ev.Target.SetRole(data.newRole.GetRole());
 
-                if (data.newRole.role != null)
-                {
-                    CustomRoles.users[ev.Target.UserId] = data.newRole.role;
-                }
+                CustomRoles.ChangeRole(ev.Target, data.newRole.GetCustomRole());
 
                 yield return Timing.WaitForSeconds(1f);
                     
@@ -163,12 +160,8 @@ namespace EasyEvents
                 {
                     if ((i != 0) && (i * data.chance / 100) <= ((i - 1) * data.chance / 100)) continue;
                     
-                    players[i].SetRole((RoleType) data.role.classId);
-                    if (data.role.role != null)
-                    {
-                        data.role.role.members.Add(players[i]);
-                        CustomRoles.users[players[i].UserId] = data.role.role;
-                    }
+                    players[i].SetRole(data.role.GetRole());
+                    CustomRoles.ChangeRole(players[i], data.role.GetCustomRole());
                     players.RemoveAt(i);
                 }
                 
@@ -177,16 +170,13 @@ namespace EasyEvents
 
             if (players.Count > 0 && finalClass.classId != -1)
             {
-                var role = (RoleType) finalClass.classId;
+                var role = finalClass.GetRole();
+                var customRole = finalClass.GetCustomRole();
                 
                 foreach (var player in players)
                 {
                     player.SetRole(role);
-                }
-
-                if (finalClass.role != null)
-                {
-                    finalClass.role.members = players;
+                    CustomRoles.ChangeRole(player, customRole);
                 }
             }
         }

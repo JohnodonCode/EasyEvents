@@ -24,8 +24,8 @@ namespace EasyEvents
         {
             if (CustomRoles.users.ContainsKey(p.UserId))
             {
-                if(!CustomRoles.users.TryGetValue(p.UserId, out var role)) throw new CommandErrorException("Error getting role for user \""+p.UserId+"\".");
-                return new RoleInfo(role, role.classId);
+                var role = CustomRoles.GetRole(p);
+                return new RoleInfo(role.id, role.classId);
             }
 
             return new RoleInfo(null, (int) p.Role);
