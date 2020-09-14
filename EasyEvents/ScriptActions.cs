@@ -94,8 +94,8 @@ namespace EasyEvents
                 CustomRoles.ChangeRole(ev.Target, data.newRole.GetCustomRole());
 
                 yield return Timing.WaitForSeconds(1f);
-                    
-                if(data.soft) ev.Target.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(oldPos, 0f, false);
+
+                if (data.soft) ev.Target.Position = oldPos;
                 else
                 {
                     foreach (var teleportdata in teleportIds)
@@ -106,8 +106,8 @@ namespace EasyEvents
                         {
                             throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
                         }
-                        
-                        ev.Target.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+
+                        ev.Target.Position = pos;
                     }
                 }
 
@@ -199,7 +199,7 @@ namespace EasyEvents
                 
                 foreach (var player in players)
                 {
-                    player.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+                    player.Position = pos;
                 }
             }
         }
