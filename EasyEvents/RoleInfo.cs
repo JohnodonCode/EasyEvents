@@ -39,5 +39,16 @@ namespace EasyEvents
         {
             return this.role == null ? Player.List.Where(player => player.Role == (RoleType) this.classId).ToList() : this.role.members;
         }
+
+        public bool Equals(RoleInfo other)
+        {
+            if (this.role == null && other.role == null && other.classId == this.classId) return true;
+            return this.role == other.role;
+        }
+
+        public RoleType GetRole()
+        {
+            return (RoleType) this.classId;
+        }
     }
 }

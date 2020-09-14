@@ -45,17 +45,19 @@ namespace EasyEvents
         public static void AddEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-            Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
+            Exiled.Events.Handlers.Player.Died += OnKill;
         }
 
         public static void RemoveEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Player.Died -= OnKill;
             classIds = null;
             teleportIds = null;
             detonate = false;
             eventRan = false;
             CustomRoles.roles = new Dictionary<string, CustomRole>();
+            CustomRoles.users = new Dictionary<string, CustomRole>();
             finalClass = null;
             clearItems = new List<RoleInfo>();
             giveData = new List<GiveData>();
@@ -67,59 +69,55 @@ namespace EasyEvents
             Timing.RunCoroutine(RoundStart());
         }
 
-        private static void OnRoleChange(ChangingRoleEventArgs ev)
+        private static void OnKill(DiedEventArgs ev)
         {
-            if (ev.Player.Role == RoleType.Spectator) return;
+            if (ev.Killer == null) return;
             
-            Timing.RunCoroutine(Infect(ev.NewRole, ev.Player));
+            Timing.RunCoroutine(Infect(ev));
         }
 
-        private static IEnumerator<float> Infect(RoleType newRole, Player p)
+        private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
             yield return Timing.WaitForSeconds(1f);
 
             foreach (var data in infectData)
             {
-                if ((RoleType) data.originalRole.classId == newRole)
+                if (!data.killedBy.Equals(ev.Killer.GetRole())) continue;
+
+                Vector3 oldPos = ev.Target.Position;
+                    
+                ev.Target.SetRole(data.newRole.GetRole());
+
+                yield return Timing.WaitForSeconds(1f);
+                    
+                if(data.soft) ev.Target.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(oldPos, 0f, false);
+                else
                 {
-                    Vector3 oldPos = p.Position;
-                    
-                    p.SetRole((RoleType) data.newRole.classId);
-
-                    yield return Timing.WaitForSeconds(1f);
-                    
-                    if(data.soft) p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(oldPos, 0f, false);
-                    else
+                    foreach (var teleportdata in teleportIds)
                     {
-                        foreach (var teleportdata in teleportIds)
+                        if (!teleportdata.role.Equals(data.newRole)) continue;
+
+                        if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
                         {
-                            if(teleportdata.role.role != null && data.newRole.role != null && teleportdata.role.role != data.newRole.role) continue;
-                            if (teleportdata.role.classId != data.newRole.classId) continue;
-
-                            if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
-                            {
-                                throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
-                            }
-                        
-                            p.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
+                            throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
                         }
-                    }
-
-                    foreach (var clearItemsData in clearItems)
-                    {
-                        if(clearItemsData.role != null && data.newRole.role != null && clearItemsData.role != data.newRole.role) continue;
-                        if (clearItemsData.classId != data.newRole.classId) continue;
                         
-                        p.ClearInventory();
+                        ev.Target.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(pos, 0f, false);
                     }
-                    
-                    foreach (var itemData in giveData)
-                    {
-                        if(itemData.role.role != null && data.newRole.role != null && itemData.role.role != data.newRole.role) continue;
-                        if (itemData.role.classId != data.newRole.classId) continue;
+                }
 
-                        p.Inventory.AddNewItem(itemData.item);
-                    }
+                foreach (var clearItemsData in clearItems)
+                {
+                    if (!clearItemsData.Equals(data.newRole)) continue;
+                        
+                    ev.Target.ClearInventory();
+                }
+                    
+                foreach (var itemData in giveData)
+                {
+                    if (!itemData.role.Equals(data.newRole)) continue;
+
+                    ev.Target.Inventory.AddNewItem(itemData.item);
                 }
             }
         }
@@ -162,6 +160,10 @@ namespace EasyEvents
                     
                     players[i].SetRole((RoleType) data.role.classId);
                     data.role.role?.members.Add(players[i]);
+                    if (data.role.role != null)
+                    {
+                        CustomRoles.users[players[i].UserId] = data.role.role;
+                    }
                     players.RemoveAt(i);
                 }
                 

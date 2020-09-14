@@ -1,7 +1,8 @@
 ﻿using System;
  using System.Collections.Generic;
+using Exiled.API.Features;
 
- namespace EasyEvents
+namespace EasyEvents
 {
     public static class Util
     {
@@ -17,6 +18,17 @@
                 list[k] = list[n];  
                 list[n] = value;  
             }  
+        }
+
+        public static RoleInfo GetRole(this Player p)
+        {
+            if (CustomRoles.users.ContainsKey(p.UserId))
+            {
+                if(!CustomRoles.users.TryGetValue(p.UserId, out var role)) throw new CommandErrorException("Error getting role for user \""+p.UserId+"\".");
+                return new RoleInfo(role, role.classId);
+            }
+
+            return new RoleInfo(null, (int) p.Role);
         }
     }
 }
