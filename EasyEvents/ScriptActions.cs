@@ -88,6 +88,11 @@ namespace EasyEvents
                     
                 ev.Target.SetRole(data.newRole.GetRole());
 
+                if (data.newRole.role != null)
+                {
+                    CustomRoles.users[ev.Target.UserId] = data.newRole.role;
+                }
+
                 yield return Timing.WaitForSeconds(1f);
                     
                 if(data.soft) ev.Target.GameObject.GetComponent<PlayerMovementSync>().OverridePosition(oldPos, 0f, false);
@@ -159,9 +164,9 @@ namespace EasyEvents
                     if ((i != 0) && (i * data.chance / 100) <= ((i - 1) * data.chance / 100)) continue;
                     
                     players[i].SetRole((RoleType) data.role.classId);
-                    data.role.role?.members.Add(players[i]);
                     if (data.role.role != null)
                     {
+                        data.role.role.members.Add(players[i]);
                         CustomRoles.users[players[i].UserId] = data.role.role;
                     }
                     players.RemoveAt(i);
