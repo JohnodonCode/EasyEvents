@@ -30,6 +30,10 @@ namespace EasyEvents
 
         public static List<InfectData> infectData = new List<InfectData>();
         
+        public static List<HPData> hpData = new List<HPData>();
+        
+        public static List<SizeData> sizeData = new List<SizeData>();
+
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
@@ -65,6 +69,8 @@ namespace EasyEvents
             clearItems = new List<RoleInfo>();
             giveData = new List<GiveData>();
             infectData = new List<InfectData>();
+            hpData = new List<HPData>();
+            sizeData = new List<SizeData>();
         }
         
         private static void OnRoundStarted()
@@ -124,6 +130,20 @@ namespace EasyEvents
 
                     ev.Target.Inventory.AddNewItem(itemData.item);
                 }
+                
+                foreach (var sizedata in sizeData)
+                {
+                    if (!sizedata.role.Equals(data.newRole)) continue;
+                    
+                    ev.Target.Scale = sizedata.scale;
+                }
+                
+                foreach (var healthData in hpData)
+                {
+                    if (!healthData.role.Equals(data.newRole)) continue;
+                    
+                    ev.Target.Health = healthData.amount;
+                }
             }
         }
         
@@ -139,6 +159,8 @@ namespace EasyEvents
             
             ClearItems();
             GiveItems();
+            SetHP();
+            SetSize();
 
             if (teleportIds != null)
             {
@@ -226,6 +248,32 @@ namespace EasyEvents
                 foreach (var player in list)
                 {
                     player.Inventory.AddNewItem(itemData.item);
+                }
+            }
+        }
+
+        private static void SetHP()
+        {
+            foreach (var data in hpData)
+            {
+                var list = data.role.GetMembers();
+
+                foreach (var player in list)
+                {
+                    player.Health = data.amount;
+                }
+            }
+        }
+        
+        private static void SetSize()
+        {
+            foreach (var data in sizeData)
+            {
+                var list = data.role.GetMembers();
+
+                foreach (var player in list)
+                {
+                    player.Scale = data.scale;
                 }
             }
         }
