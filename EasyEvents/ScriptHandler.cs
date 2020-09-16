@@ -63,6 +63,10 @@ namespace EasyEvents
                         Scale.Run(args, i);
                         break;
                     
+                    case "disabledecontamination":
+                        DisableDecontamination.Run(args, i);
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;

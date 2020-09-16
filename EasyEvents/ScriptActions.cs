@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
+using LightContainmentZoneDecontamination;
 using MEC;
 using UnityEngine;
 using Random = System.Random;
@@ -34,6 +35,8 @@ namespace EasyEvents
         
         public static List<SizeData> sizeData = new List<SizeData>();
 
+        public static bool disableDecontamination = false;
+
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
         {
             if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
@@ -53,6 +56,7 @@ namespace EasyEvents
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Player.Died += OnKill;
+            Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnDeconText;
         }
 
         public static void RemoveEvents()
@@ -71,6 +75,7 @@ namespace EasyEvents
             infectData = new List<InfectData>();
             hpData = new List<HPData>();
             sizeData = new List<SizeData>();
+            disableDecontamination = false;
         }
         
         private static void OnRoundStarted()
@@ -83,6 +88,16 @@ namespace EasyEvents
             if (ev.Killer == null) return;
             
             Timing.RunCoroutine(Infect(ev));
+        }
+
+        private static void OnDeconText(AnnouncingDecontaminationEventArgs ev)
+        {
+            ev.IsAllowed = !disableDecontamination;
+        }
+
+        private static void OnDecon(DecontaminatingEventArgs ev)
+        {
+            ev.IsAllowed = !disableDecontamination;
         }
 
         private static IEnumerator<float> Infect(DiedEventArgs ev)
@@ -170,6 +185,12 @@ namespace EasyEvents
             if (detonate)
             {
                 AlphaWarheadController.Host.StartDetonation();
+            }
+
+            if (disableDecontamination)
+            {
+                DecontaminationController.Singleton._disableDecontamination = true;
+                DecontaminationController.Singleton._stopUpdating = true;
             }
         }
 
