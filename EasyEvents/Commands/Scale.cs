@@ -12,9 +12,9 @@ namespace EasyEvents.Commands
             
             var roleInfo = RoleInfo.parseRole(args[0], "scale", i, 0);
             
-            if(!int.TryParse(args[1].Trim(), out var x)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 1. Expected \"INT\" but got \""+args[1]+"\".");
-            if(!int.TryParse(args[2].Trim(), out var y)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 2. Expected \"INT\" but got \""+args[2]+"\".");
-            if(!int.TryParse(args[3].Trim(), out var z)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 3. Expected \"INT\" but got \""+args[3]+"\".");
+            if(!float.TryParse(args[1].Trim(), out var x)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 1. Expected \"FLOAT\" but got \""+args[1]+"\".");
+            if(!float.TryParse(args[2].Trim(), out var y)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 2. Expected \"FLOAT\" but got \""+args[2]+"\".");
+            if(!float.TryParse(args[3].Trim(), out var z)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 3. Expected \"FLOAT\" but got \""+args[3]+"\".");
             
             
             ScriptActions.sizeData.Add(new SizeData(roleInfo, new Vector3(x, y, z)));
