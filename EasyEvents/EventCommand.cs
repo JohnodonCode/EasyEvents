@@ -53,7 +53,7 @@ namespace EasyEvents
                 return true;
             }
 
-            if (ScriptActions.eventRan)
+            if (ScriptActions.scriptData.eventRan)
             {
                 response = "Only one event can be ran per round. Restart the round to run this event.";
                 return true;
@@ -63,7 +63,7 @@ namespace EasyEvents
             {
                 ScriptHandler.RunScript(text);
                 response = "Event \"" + command + "\" started successfully";
-                ScriptActions.eventRan = true;
+                ScriptActions.scriptData.eventRan = true;
                 return true;
             }
             catch (Exception e)

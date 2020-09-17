@@ -8,7 +8,7 @@ namespace EasyEvents.Commands
     {
         public static void Run(List<string> args, int i)
         {
-            ScriptActions.disableDecontamination = true;
+            ScriptActions.scriptData.disableDecontamination = true;
         }
     }
 }

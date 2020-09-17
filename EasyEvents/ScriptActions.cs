@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
@@ -16,40 +15,21 @@ namespace EasyEvents
     {
         private static Random random = new Random();
         
-        public static bool eventRan = false;
-        
-        private static List<SpawnData> classIds = null;
-        private static RoleInfo finalClass = null;
-
-        private static List<TeleportData> teleportIds = null;
-
-        public static bool detonate = false;
-
-        public static List<RoleInfo> clearItems = new List<RoleInfo>();
-        
-        public static List<GiveData> giveData = new List<GiveData>();
-
-        public static List<InfectData> infectData = new List<InfectData>();
-        
-        public static List<HPData> hpData = new List<HPData>();
-        
-        public static List<SizeData> sizeData = new List<SizeData>();
-
-        public static bool disableDecontamination = false;
+        public static ScriptActionsStore scriptData = new ScriptActionsStore();
 
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
         {
-            if (classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
+            if (scriptData.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
-            classIds = _classIds;
-            finalClass = _finalClass;
+            scriptData.classIds = _classIds;
+            scriptData.finalClass = _finalClass;
         }
 
         public static void SetTeleport(List<TeleportData> _teleportIds, int line)
         {
-            if (teleportIds != null) throw new CommandErrorException("Error running command \"teleport\" at line "+line+": A teleport rule has already been set. Only run the \"teleport\" command once.");
+            if (scriptData.teleportIds != null) throw new CommandErrorException("Error running command \"teleport\" at line "+line+": A teleport rule has already been set. Only run the \"teleport\" command once.");
 
-            teleportIds = _teleportIds;
+            scriptData.teleportIds = _teleportIds;
         }
 
         public static void AddEvents()
@@ -57,25 +37,20 @@ namespace EasyEvents
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Player.Died += OnKill;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnDeconText;
+            Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
         }
 
         public static void RemoveEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Player.Died -= OnKill;
-            classIds = null;
-            teleportIds = null;
-            detonate = false;
-            eventRan = false;
+            Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnDeconText;
+            Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
+
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
-            finalClass = null;
-            clearItems = new List<RoleInfo>();
-            giveData = new List<GiveData>();
-            infectData = new List<InfectData>();
-            hpData = new List<HPData>();
-            sizeData = new List<SizeData>();
-            disableDecontamination = false;
+            
+            scriptData = new ScriptActionsStore();
         }
         
         private static void OnRoundStarted()
@@ -92,19 +67,19 @@ namespace EasyEvents
 
         private static void OnDeconText(AnnouncingDecontaminationEventArgs ev)
         {
-            ev.IsAllowed = !disableDecontamination;
+            ev.IsAllowed = !scriptData.disableDecontamination;
         }
 
         private static void OnDecon(DecontaminatingEventArgs ev)
         {
-            ev.IsAllowed = !disableDecontamination;
+            ev.IsAllowed = !scriptData.disableDecontamination;
         }
 
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
             yield return Timing.WaitForSeconds(1f);
 
-            foreach (var data in infectData)
+            foreach (var data in scriptData.infectData)
             {
                 if (!data.killedBy.Equals(ev.Killer.GetRole())) continue;
 
@@ -119,7 +94,7 @@ namespace EasyEvents
                 if (data.soft) ev.Target.Position = oldPos;
                 else
                 {
-                    foreach (var teleportdata in teleportIds)
+                    foreach (var teleportdata in scriptData.teleportIds)
                     {
                         if (!teleportdata.role.Equals(data.newRole)) continue;
 
@@ -132,28 +107,28 @@ namespace EasyEvents
                     }
                 }
 
-                foreach (var clearItemsData in clearItems)
+                foreach (var clearItemsData in scriptData.clearItems)
                 {
                     if (!clearItemsData.Equals(data.newRole)) continue;
                         
                     ev.Target.ClearInventory();
                 }
                     
-                foreach (var itemData in giveData)
+                foreach (var itemData in scriptData.giveData)
                 {
                     if (!itemData.role.Equals(data.newRole)) continue;
 
                     ev.Target.Inventory.AddNewItem(itemData.item);
                 }
                 
-                foreach (var sizedata in sizeData)
+                foreach (var sizedata in scriptData.sizeData)
                 {
                     if (!sizedata.role.Equals(data.newRole)) continue;
                     
                     ev.Target.Scale = sizedata.scale;
                 }
                 
-                foreach (var healthData in hpData)
+                foreach (var healthData in scriptData.hpData)
                 {
                     if (!healthData.role.Equals(data.newRole)) continue;
                     
@@ -166,7 +141,7 @@ namespace EasyEvents
         {
             yield return Timing.WaitForSeconds(1f);
             
-            if (classIds != null)
+            if (scriptData.classIds != null)
             {
                 SetRoles();
                 yield return Timing.WaitForSeconds(1f);
@@ -177,17 +152,17 @@ namespace EasyEvents
             SetHP();
             SetSize();
 
-            if (teleportIds != null)
+            if (scriptData.teleportIds != null)
             {
                 Teleport();
             }
 
-            if (detonate)
+            if (scriptData.detonate)
             {
                 AlphaWarheadController.Host.StartDetonation();
             }
 
-            if (disableDecontamination)
+            if (scriptData.disableDecontamination)
             {
                 DecontaminationController.Singleton._disableDecontamination = true;
                 DecontaminationController.Singleton._stopUpdating = true;
@@ -199,7 +174,7 @@ namespace EasyEvents
             var players = Player.List.ToList();
             players.Shuffle();
             
-            foreach (var data in classIds)
+            foreach (var data in scriptData.classIds)
             {
                 var num = 0;
                 
@@ -216,10 +191,10 @@ namespace EasyEvents
                 players.Shuffle();
             }
 
-            if (players.Count > 0 && finalClass.classId != -1)
+            if (players.Count > 0 && scriptData.finalClass.classId != -1)
             {
-                var role = finalClass.GetRole();
-                var customRole = finalClass.GetCustomRole();
+                var role = scriptData.finalClass.GetRole();
+                var customRole = scriptData.finalClass.GetCustomRole();
                 
                 foreach (var player in players)
                 {
@@ -231,7 +206,7 @@ namespace EasyEvents
 
         private static void Teleport()
         {
-            foreach (var data in teleportIds)
+            foreach (var data in scriptData.teleportIds)
             {
                 if (!PlayerMovementSync.FindSafePosition(data.door.transform.position, out var pos))
                 {
@@ -249,7 +224,7 @@ namespace EasyEvents
 
         private static void ClearItems()
         {
-            foreach (var clearItemsData in clearItems)
+            foreach (var clearItemsData in scriptData.clearItems)
             {
                 var list = clearItemsData.GetMembers();
 
@@ -262,7 +237,7 @@ namespace EasyEvents
 
         private static void GiveItems()
         {
-            foreach (var itemData in giveData)
+            foreach (var itemData in scriptData.giveData)
             {
                 var list = itemData.role.GetMembers();
 
@@ -275,7 +250,7 @@ namespace EasyEvents
 
         private static void SetHP()
         {
-            foreach (var data in hpData)
+            foreach (var data in scriptData.hpData)
             {
                 var list = data.role.GetMembers();
 
@@ -288,7 +263,7 @@ namespace EasyEvents
         
         private static void SetSize()
         {
-            foreach (var data in sizeData)
+            foreach (var data in scriptData.sizeData)
             {
                 var list = data.role.GetMembers();
 

@@ -32,7 +32,7 @@ namespace EasyEvents
                         break;
                     
                     case "detonate":
-                        ScriptActions.detonate = true;
+                        ScriptActions.scriptData.detonate = true;
                         break;
                     
                     case "teleport":

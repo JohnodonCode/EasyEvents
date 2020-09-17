@@ -14,7 +14,7 @@ namespace EasyEvents.Commands
 
             var soft = args.Count > 2 && args[2].Trim().ToLower() == "soft";
 
-            ScriptActions.infectData.Add(new InfectData(killedBy, newRole, soft));
+            ScriptActions.scriptData.infectData.Add(new InfectData(killedBy, newRole, soft));
         }
     }
 }

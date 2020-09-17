@@ -13,7 +13,7 @@ namespace EasyEvents.Commands
             var roleInfo = RoleInfo.parseRole(args[0], "hp", i, 0);
             if(!int.TryParse(args[1].Trim(), out var amount)) throw new InvalidArgumentException("Invalid argument for command \"hp\" on line "+i+", argument 1. Expected \"INT\" but got \""+args[1]+"\".");
             
-            ScriptActions.hpData.Add(new HPData(roleInfo, amount));
+            ScriptActions.scriptData.hpData.Add(new HPData(roleInfo, amount));
         }
     }
 }

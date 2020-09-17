@@ -14,7 +14,7 @@ namespace EasyEvents.Commands
 
             if(!Enum.TryParse<ItemType>(args[1].Trim(), true, out var item)) throw new InvalidArgumentException("Invalid argument for command \"give\" on line "+i+", argument 1. Expected \"ITEM_TYPE\" but got \""+args[0]+"\".");
             
-            ScriptActions.giveData.Add(new GiveData(item, roleInfo));
+            ScriptActions.scriptData.giveData.Add(new GiveData(item, roleInfo));
         }
     }
 }
