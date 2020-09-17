@@ -16,20 +16,28 @@ namespace EasyEvents
         private static Random random = new Random();
         
         public static ScriptActionsStore scriptData = new ScriptActionsStore();
+        
+        private static Dictionary<int, ScriptActionsStore> delays = new Dictionary<int, ScriptActionsStore>();
 
-        public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line)
+        public static ScriptActionsStore GetDelay(int delay)
         {
-            if (scriptData.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
-
-            scriptData.classIds = _classIds;
-            scriptData.finalClass = _finalClass;
+            if(!delays.ContainsKey(delay)) delays[delay] = new ScriptActionsStore();
+            return delays[delay];
         }
 
-        public static void SetTeleport(List<TeleportData> _teleportIds, int line)
+        private static IEnumerator<float> DoDelayedAction(int delay)
         {
-            if (scriptData.teleportIds != null) throw new CommandErrorException("Error running command \"teleport\" at line "+line+": A teleport rule has already been set. Only run the \"teleport\" command once.");
+            yield return Timing.WaitForSeconds(delay);
 
-            scriptData.teleportIds = _teleportIds;
+            Timing.RunCoroutine(DoActions(delays[delay]));
+        }
+
+        public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line, ScriptActionsStore data)
+        {
+            if (data.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
+
+            data.classIds = _classIds;
+            data.finalClass = _finalClass;
         }
 
         public static void AddEvents()
@@ -51,11 +59,17 @@ namespace EasyEvents
             CustomRoles.users = new Dictionary<string, string>();
             
             scriptData = new ScriptActionsStore();
+            delays = new Dictionary<int, ScriptActionsStore>();
         }
         
         private static void OnRoundStarted()
-        { 
-            Timing.RunCoroutine(RoundStart());
+        {
+            Timing.RunCoroutine(DoActions(scriptData));
+
+            foreach (var delay in delays.Keys)
+            {
+                Timing.RunCoroutine(DoDelayedAction(delay));
+            }
         }
 
         private static void OnKill(DiedEventArgs ev)
@@ -98,12 +112,7 @@ namespace EasyEvents
                     {
                         if (!teleportdata.role.Equals(data.newRole)) continue;
 
-                        if (!PlayerMovementSync.FindSafePosition(teleportdata.door.transform.position, out var pos))
-                        {
-                            throw new EventRunErrorException("No safe position could be found for door \""+teleportdata.door.DoorName+"\".");
-                        }
-
-                        ev.Target.Position = pos;
+                        ev.Target.Position = teleportdata.pos;
                     }
                 }
 
@@ -137,44 +146,44 @@ namespace EasyEvents
             }
         }
         
-        private static IEnumerator<float> RoundStart()
+        private static IEnumerator<float> DoActions(ScriptActionsStore dataObj)
         {
             yield return Timing.WaitForSeconds(1f);
             
-            if (scriptData.classIds != null)
+            if (dataObj.classIds != null)
             {
-                SetRoles();
+                SetRoles(dataObj);
                 yield return Timing.WaitForSeconds(1f);
             }
             
-            ClearItems();
-            GiveItems();
-            SetHP();
-            SetSize();
+            ClearItems(dataObj);
+            GiveItems(dataObj);
+            SetHP(dataObj);
+            SetSize(dataObj);
 
-            if (scriptData.teleportIds != null)
+            if (dataObj.teleportIds != null)
             {
-                Teleport();
+                Teleport(dataObj);
             }
 
-            if (scriptData.detonate)
+            if (dataObj.detonate)
             {
                 AlphaWarheadController.Host.StartDetonation();
             }
 
-            if (scriptData.disableDecontamination)
+            if (dataObj.disableDecontamination)
             {
                 DecontaminationController.Singleton._disableDecontamination = true;
                 DecontaminationController.Singleton._stopUpdating = true;
             }
         }
 
-        private static void SetRoles()
+        private static void SetRoles(ScriptActionsStore dataObj)
         {
             var players = Player.List.ToList();
             players.Shuffle();
             
-            foreach (var data in scriptData.classIds)
+            foreach (var data in dataObj.classIds)
             {
                 var num = 0;
                 
@@ -191,10 +200,10 @@ namespace EasyEvents
                 players.Shuffle();
             }
 
-            if (players.Count > 0 && scriptData.finalClass.classId != -1)
+            if (players.Count > 0 && dataObj.finalClass.classId != -1)
             {
-                var role = scriptData.finalClass.GetRole();
-                var customRole = scriptData.finalClass.GetCustomRole();
+                var role = dataObj.finalClass.GetRole();
+                var customRole = dataObj.finalClass.GetCustomRole();
                 
                 foreach (var player in players)
                 {
@@ -204,27 +213,22 @@ namespace EasyEvents
             }
         }
 
-        private static void Teleport()
+        private static void Teleport(ScriptActionsStore dataObj)
         {
-            foreach (var data in scriptData.teleportIds)
+            foreach (var data in dataObj.teleportIds)
             {
-                if (!PlayerMovementSync.FindSafePosition(data.door.transform.position, out var pos))
-                {
-                    throw new EventRunErrorException("No safe position could be found for door \""+data.door.DoorName+"\".");
-                }
-                
                 var players = data.role.GetMembers();
                 
                 foreach (var player in players)
                 {
-                    player.Position = pos;
+                    player.Position = data.pos;
                 }
             }
         }
 
-        private static void ClearItems()
+        private static void ClearItems(ScriptActionsStore dataObj)
         {
-            foreach (var clearItemsData in scriptData.clearItems)
+            foreach (var clearItemsData in dataObj.clearItems)
             {
                 var list = clearItemsData.GetMembers();
 
@@ -235,9 +239,9 @@ namespace EasyEvents
             }
         }
 
-        private static void GiveItems()
+        private static void GiveItems(ScriptActionsStore dataObj)
         {
-            foreach (var itemData in scriptData.giveData)
+            foreach (var itemData in dataObj.giveData)
             {
                 var list = itemData.role.GetMembers();
 
@@ -248,9 +252,9 @@ namespace EasyEvents
             }
         }
 
-        private static void SetHP()
+        private static void SetHP(ScriptActionsStore dataObj)
         {
-            foreach (var data in scriptData.hpData)
+            foreach (var data in dataObj.hpData)
             {
                 var list = data.role.GetMembers();
 
@@ -261,9 +265,9 @@ namespace EasyEvents
             }
         }
         
-        private static void SetSize()
+        private static void SetSize(ScriptActionsStore dataObj)
         {
-            foreach (var data in scriptData.sizeData)
+            foreach (var data in dataObj.sizeData)
             {
                 var list = data.role.GetMembers();
 

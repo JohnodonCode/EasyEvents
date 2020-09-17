@@ -53,7 +53,7 @@ namespace EasyEvents.Commands
             if(sum > 100) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances should never exceed 100. Got "+sum+".");
             if(sum < 100 && finalClassId == -1) throw new InvalidArgumentException("Invalid arguments for command \"spawn\" on line "+i+", argument. The sum of spawn chances shouldn't be less than 100 unless you have set a class to use for the remaining players. Got "+sum+".");
                         
-            ScriptActions.SetCustomSpawn(classIds, new RoleInfo(finalClassRole, finalClassId), i);
+            ScriptActions.SetCustomSpawn(classIds, new RoleInfo(finalClassRole, finalClassId), i, ScriptActions.scriptData);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace EasyEvents
         public List<SpawnData> classIds = null;
         public RoleInfo finalClass = null;
         
-        public List<TeleportData> teleportIds = null;
+        public List<TeleportData> teleportIds = new List<TeleportData>();
         
         public bool detonate = false;
         

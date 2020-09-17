@@ -1,15 +1,16 @@
 ﻿using EasyEvents.Commands;
+using UnityEngine;
 
 namespace EasyEvents.Types
 {
     public class TeleportData
     {
-        public Door door;
+        public Vector3 pos;
         public RoleInfo role;
 
-        public TeleportData(Door d, RoleInfo r)
+        public TeleportData(Vector3 p, RoleInfo r)
         {
-            door = d;
+            pos = p;
             role = r;
         }
     }
