@@ -4,7 +4,6 @@ using System.Linq;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
-using LightContainmentZoneDecontamination;
 using MEC;
 using UnityEngine;
 using Random = System.Random;
@@ -77,6 +76,8 @@ namespace EasyEvents
 
         private static void OnKill(DiedEventArgs ev)
         {
+            Timing.RunCoroutine(CheckLast());
+            
             if (ev.Killer == null) return;
             
             Timing.RunCoroutine(Infect(ev));
@@ -92,6 +93,24 @@ namespace EasyEvents
             ev.IsAllowed = !scriptData.disableDecontamination;
         }
 
+        private static IEnumerator<float> CheckLast()
+        {
+            yield return Timing.WaitForSeconds(1f);
+
+            foreach (var role in scriptData.last)
+            {
+                if (Player.List.Count(p => p.GetRole().Equals(role)) == 1)
+                {
+                    foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
+                    {
+                        player.Kill();
+                    }
+                }
+
+                break;
+            }
+        }
+        
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
             yield return Timing.WaitForSeconds(1f);

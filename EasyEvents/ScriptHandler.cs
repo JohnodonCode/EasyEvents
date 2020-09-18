@@ -67,6 +67,10 @@ namespace EasyEvents
                         DisableDecontamination.Run(args, i);
                         break;
                     
+                    case "last":
+                        Last.Run(args, i);
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;

@@ -25,6 +25,8 @@ namespace EasyEvents
         public List<SizeData> sizeData = new List<SizeData>();
         
         public bool disableDecontamination = false;
+
+        public List<RoleInfo> last = new List<RoleInfo>();
         
         public ScriptActionsStore()
         {

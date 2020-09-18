@@ -83,6 +83,7 @@
     <Compile Include="Commands\Give.cs" />
     <Compile Include="Commands\HP.cs" />
     <Compile Include="Commands\Infect.cs" />
+    <Compile Include="Commands\Last.cs" />
     <Compile Include="Commands\Scale.cs" />
     <Compile Include="Commands\Spawn.cs" />
     <Compile Include="Commands\Teleport.cs" />
