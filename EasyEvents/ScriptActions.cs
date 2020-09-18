@@ -60,6 +60,8 @@ namespace EasyEvents
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
             
+            CustomRoles.roles.Add("all", new CustomRole("all", 2));
+            
             scriptData = new ScriptActionsStore();
             delays = new Dictionary<int, ScriptActionsStore>();
         }
@@ -183,6 +185,9 @@ namespace EasyEvents
             GiveItems(dataObj);
             SetHP(dataObj);
             SetSize(dataObj);
+            RunCassie(dataObj);
+            RunBroadcasts(dataObj);
+            RunHints(dataObj);
 
             if (dataObj.detonate)
             {
@@ -286,6 +291,51 @@ namespace EasyEvents
                 foreach (var player in list)
                 {
                     player.Scale = data.scale;
+                }
+            }
+        }
+
+        private static void RunCassie(ScriptActionsStore dataObj)
+        {
+            foreach (var cassieData in dataObj.cassie)
+            {
+                Cassie.Message(cassieData.message, false, false);
+                
+                if (cassieData.role.roleID == "all")
+                {
+                    dataObj.cassie.Remove(cassieData);
+                }
+            }
+        }
+        
+        private static void RunBroadcasts(ScriptActionsStore dataObj)
+        {
+            foreach (var broadcastData in dataObj.broadcast)
+            {
+                foreach (var player in broadcastData.role.GetMembers())
+                {
+                    player.Broadcast(5, broadcastData.message);
+                }
+                
+                if (broadcastData.role.roleID == "all")
+                {
+                    dataObj.broadcast.Remove(broadcastData);
+                }
+            }
+        }
+        
+        private static void RunHints(ScriptActionsStore dataObj)
+        {
+            foreach (var hintData in dataObj.hint)
+            {
+                foreach (var player in hintData.role.GetMembers())
+                {
+                    player.ShowHint(hintData.message, 5);
+                }
+
+                if (hintData.role.roleID == "all")
+                {
+                    dataObj.hint.Remove(hintData);
                 }
             }
         }

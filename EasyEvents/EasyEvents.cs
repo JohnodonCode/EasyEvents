@@ -21,6 +21,7 @@ namespace EasyEvents
             ScriptStore.LoadScripts();
             ScriptActions.AddEvents();
             Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
+            CustomRoles.roles.Add("all", new CustomRole("all", 2));
         }
         
         public override void OnDisabled()

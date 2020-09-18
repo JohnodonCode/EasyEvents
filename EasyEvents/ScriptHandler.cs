@@ -71,6 +71,18 @@ namespace EasyEvents
                         Last.Run(args, i);
                         break;
                     
+                    case "cassie":
+                        TextCommand.Run(args, i, "cassie");
+                        break;
+                    
+                    case "broadcast":
+                        TextCommand.Run(args, i, "broadcast");
+                        break;
+                    
+                    case "hint":
+                        TextCommand.Run(args, i, "hint");
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;

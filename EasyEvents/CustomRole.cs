@@ -18,7 +18,7 @@ namespace EasyEvents
 
         public List<Player> GetMembers()
         {
-            return Player.List.Where(p => members.Contains(p.UserId)).ToList();
+            return this.id == "all" ? Player.List.ToList() : Player.List.Where(p => members.Contains(p.UserId)).ToList();
         }
     }
 }

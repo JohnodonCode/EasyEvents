@@ -34,6 +34,11 @@ namespace EasyEvents
                 if(!CustomRoles.roles.TryGetValue(arg.Trim().ToLower(), out role)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
                 classId = role.classId;
             }
+            else if (arg.Trim().ToLower() == "all")
+            {
+                if(!CustomRoles.roles.TryGetValue("all", out role)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". You really shouldn't be getting this error, and if you are, RUN.");
+                classId = role.classId;
+            }
             else
             {
                 if(!Enum.TryParse<RoleType>(arg.Trim(), true, out var roleId)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
@@ -50,6 +55,7 @@ namespace EasyEvents
 
         public bool Equals(RoleInfo other)
         {
+            if (this.roleID == "all" || other.roleID == "all") return true;
             if (this.GetCustomRole() == null && other.GetCustomRole() == null && other.classId == this.classId) return true;
             return this.roleID == other.roleID;
         }
@@ -57,6 +63,12 @@ namespace EasyEvents
         public RoleType GetRole()
         {
             return (RoleType) this.classId;
+        }
+        
+        public static RoleInfo all
+        {
+            get => new RoleInfo("all", 2);
+            private set {}
         }
     }
 }

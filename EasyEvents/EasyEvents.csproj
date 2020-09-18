@@ -87,6 +87,7 @@
     <Compile Include="Commands\Scale.cs" />
     <Compile Include="Commands\Spawn.cs" />
     <Compile Include="Commands\Teleport.cs" />
+    <Compile Include="Commands\TextCommand.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CustomRole.cs" />
     <Compile Include="CustomRoles.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Types\SizeData.cs" />
     <Compile Include="Types\SpawnData.cs" />
     <Compile Include="Types\TeleportData.cs" />
+    <Compile Include="Types\TextData.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

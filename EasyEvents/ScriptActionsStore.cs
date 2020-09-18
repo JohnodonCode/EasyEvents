@@ -27,6 +27,10 @@ namespace EasyEvents
         public bool disableDecontamination = false;
 
         public List<RoleInfo> last = new List<RoleInfo>();
+
+        public List<TextData> cassie = new List<TextData>();
+        public List<TextData> broadcast = new List<TextData>();
+        public List<TextData> hint = new List<TextData>();
         
         public ScriptActionsStore()
         {
