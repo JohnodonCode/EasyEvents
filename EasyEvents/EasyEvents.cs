@@ -20,7 +20,7 @@ namespace EasyEvents
             Singleton = this;
             ScriptStore.LoadScripts();
             ScriptActions.AddEvents();
-            Exiled.Events.Handlers.Server.RestartingRound += EventHandlers.onRoundRestart;
+            Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
         }
         
         public override void OnDisabled()
@@ -28,7 +28,7 @@ namespace EasyEvents
             base.OnDisabled();
             Singleton = null;
             ScriptActions.RemoveEvents();
-            Exiled.Events.Handlers.Server.RestartingRound -= EventHandlers.onRoundRestart;
+            Exiled.Events.Handlers.Server.RestartingRound -= ScriptActions.Reset;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace EasyEvents
         
         public static void ChangeRole(Player p, CustomRole newRole)
         {
-            if (!roles.ContainsKey(newRole.id)) return;
+            if (newRole == null || p == null || !roles.ContainsKey(newRole.id)) return;
             
             if (!users.ContainsKey(p.UserId))
             {

@@ -91,7 +91,6 @@
     <Compile Include="CustomRoles.cs" />
     <Compile Include="EasyEvents.cs" />
     <Compile Include="EventCommand.cs" />
-    <Compile Include="EventHandlers.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfo.cs" />

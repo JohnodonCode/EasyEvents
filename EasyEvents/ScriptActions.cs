@@ -29,7 +29,7 @@ namespace EasyEvents
         {
             yield return Timing.WaitForSeconds(delay);
 
-            Timing.RunCoroutine(DoActions(delays[delay]));
+            Timing.RunCoroutine(RoundStart(delays[delay]));
         }
 
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line, ScriptActionsStore data)
@@ -54,7 +54,10 @@ namespace EasyEvents
             Exiled.Events.Handlers.Player.Died -= OnKill;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
+        }
 
+        public static void Reset()
+        {
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
             
@@ -63,9 +66,9 @@ namespace EasyEvents
         }
         
         private static void OnRoundStarted()
-        {
-            Timing.RunCoroutine(DoActions(scriptData));
-
+        { 
+            Timing.RunCoroutine(RoundStart(scriptData));
+            
             foreach (var delay in delays.Keys)
             {
                 Timing.RunCoroutine(DoDelayedAction(delay));
@@ -146,35 +149,25 @@ namespace EasyEvents
             }
         }
         
-        private static IEnumerator<float> DoActions(ScriptActionsStore dataObj)
+        private static IEnumerator<float> RoundStart(ScriptActionsStore dataObj)
         {
             yield return Timing.WaitForSeconds(1f);
             
-            if (dataObj.classIds != null)
+            if (dataObj.classIds != null && dataObj.classIds.Count > 0)
             {
                 SetRoles(dataObj);
                 yield return Timing.WaitForSeconds(1f);
             }
             
+            Teleport(dataObj);
             ClearItems(dataObj);
             GiveItems(dataObj);
             SetHP(dataObj);
             SetSize(dataObj);
 
-            if (dataObj.teleportIds != null)
-            {
-                Teleport(dataObj);
-            }
-
             if (dataObj.detonate)
             {
                 AlphaWarheadController.Host.StartDetonation();
-            }
-
-            if (dataObj.disableDecontamination)
-            {
-                DecontaminationController.Singleton._disableDecontamination = true;
-                DecontaminationController.Singleton._stopUpdating = true;
             }
         }
 
@@ -200,7 +193,7 @@ namespace EasyEvents
                 players.Shuffle();
             }
 
-            if (players.Count > 0 && dataObj.finalClass.classId != -1)
+            if (dataObj.finalClass != null && players.Count > 0 && dataObj.finalClass.classId != -1)
             {
                 var role = dataObj.finalClass.GetRole();
                 var customRole = dataObj.finalClass.GetCustomRole();
