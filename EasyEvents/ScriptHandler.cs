@@ -9,15 +9,19 @@ namespace EasyEvents
     {
         public static void RunScript(string inputText)
         {
+            ScriptActions.Reset();
+            
             var arr = inputText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             
             for (var i = 0; i < arr.Length; i++)
             {
                 var s = arr[i];
                 
-                var cmd = s.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[0].Trim().ToLower();
                 var args = s.Split(new char[0], StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (args.Count > 0) args.RemoveAt(0);
+                if (args.Count < 1) continue;
+                
+                var cmd = args[0].Trim().ToLower();
+                args.RemoveAt(0);
                 
                 if (cmd.StartsWith("#") || cmd.StartsWith("//") || cmd == string.Empty) continue;
 
