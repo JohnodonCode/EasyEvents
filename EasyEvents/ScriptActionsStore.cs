@@ -32,6 +32,8 @@ namespace EasyEvents
         public List<TextData> broadcast = new List<TextData>();
         public List<TextData> hint = new List<TextData>();
         
+        public List<LightData> lights = new List<LightData>();
+        
         public ScriptActionsStore()
         {
             

@@ -83,6 +83,10 @@ namespace EasyEvents
                         TextCommand.Run(args, i, "hint");
                         break;
                     
+                    case "lights":
+                        Lights.Run(args, i);
+                        break;
+                    
                     default:
                         throw new InvalidCommandException("The command \""+cmd+"\" on line "+i+" was not found.");
                         break;

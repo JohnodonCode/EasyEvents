@@ -28,7 +28,7 @@ namespace EasyEvents
         {
             yield return Timing.WaitForSeconds(delay);
 
-            Timing.RunCoroutine(RoundStart(delays[delay]));
+            Timing.RunCoroutine(RoundStart(delays[delay], false));
         }
 
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line, ScriptActionsStore data)
@@ -68,12 +68,7 @@ namespace EasyEvents
         
         private static void OnRoundStarted()
         { 
-            Timing.RunCoroutine(RoundStart(scriptData));
-            
-            foreach (var delay in delays.Keys)
-            {
-                Timing.RunCoroutine(DoDelayedAction(delay));
-            }
+            Timing.RunCoroutine(RoundStart(scriptData, true));
         }
 
         private static void OnKill(DiedEventArgs ev)
@@ -167,31 +162,61 @@ namespace EasyEvents
                     
                     ev.Target.Health = healthData.amount;
                 }
+
+                foreach (var broadcastData in scriptData.broadcast)
+                {
+                    if (!broadcastData.role.Equals(data.newRole)) continue;
+                    
+                    ev.Target.Broadcast(5, broadcastData.message);
+                }
+
+                foreach (var hintData in scriptData.hint)
+                {
+                    if (!hintData.role.Equals(data.newRole)) continue;
+                    
+                    ev.Target.ShowHint(hintData.message, 5);
+                }
             }
         }
         
-        private static IEnumerator<float> RoundStart(ScriptActionsStore dataObj)
+        private static IEnumerator<float> RoundStart(ScriptActionsStore dataObj, bool main)
         {
             yield return Timing.WaitForSeconds(1f);
-            
+
             if (dataObj.classIds != null && dataObj.classIds.Count > 0)
             {
                 SetRoles(dataObj);
                 yield return Timing.WaitForSeconds(1f);
             }
             
-            Teleport(dataObj);
-            ClearItems(dataObj);
-            GiveItems(dataObj);
-            SetHP(dataObj);
-            SetSize(dataObj);
-            RunCassie(dataObj);
-            RunBroadcasts(dataObj);
-            RunHints(dataObj);
-
-            if (dataObj.detonate)
+            try
             {
-                AlphaWarheadController.Host.StartDetonation();
+                Teleport(dataObj);
+                ClearItems(dataObj);
+                GiveItems(dataObj);
+                SetHP(dataObj);
+                SetSize(dataObj);
+                RunCassie(dataObj);
+                RunBroadcasts(dataObj);
+                RunHints(dataObj);
+                RunLights(dataObj);
+
+                if (dataObj.detonate)
+                {
+                    AlphaWarheadController.Host.StartDetonation();
+                }
+
+                if (main)
+                {
+                    foreach (var delay in delays.Keys)
+                    {
+                        Timing.RunCoroutine(DoDelayedAction(delay));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
             }
         }
 
@@ -337,6 +362,14 @@ namespace EasyEvents
                 {
                     dataObj.hint.Remove(hintData);
                 }
+            }
+        }
+
+        private static void RunLights(ScriptActionsStore dataObj)
+        {
+            foreach (var lightData in dataObj.lights)
+            {
+                Map.TurnOffAllLights(lightData.time, lightData.HCZOnly);
             }
         }
     }

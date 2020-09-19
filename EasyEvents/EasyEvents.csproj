@@ -84,6 +84,7 @@
     <Compile Include="Commands\HP.cs" />
     <Compile Include="Commands\Infect.cs" />
     <Compile Include="Commands\Last.cs" />
+    <Compile Include="Commands\Lights.cs" />
     <Compile Include="Commands\Scale.cs" />
     <Compile Include="Commands\Spawn.cs" />
     <Compile Include="Commands\Teleport.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Types\GiveData.cs" />
     <Compile Include="Types\HPData.cs" />
     <Compile Include="Types\InfectData.cs" />
+    <Compile Include="Types\LightData.cs" />
     <Compile Include="Types\SizeData.cs" />
     <Compile Include="Types\SpawnData.cs" />
     <Compile Include="Types\TeleportData.cs" />

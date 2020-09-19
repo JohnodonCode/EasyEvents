@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
@@ -28,6 +29,7 @@ namespace EasyEvents
         {
             base.OnDisabled();
             Singleton = null;
+            ScriptStore.Scripts = new Dictionary<string, string>();
             ScriptActions.RemoveEvents();
             Exiled.Events.Handlers.Server.RestartingRound -= ScriptActions.Reset;
         }
