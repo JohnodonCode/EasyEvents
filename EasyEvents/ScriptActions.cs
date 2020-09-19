@@ -165,14 +165,14 @@ namespace EasyEvents
 
                 foreach (var broadcastData in scriptData.broadcast)
                 {
-                    if (!broadcastData.role.Equals(data.newRole)) continue;
+                    if (!broadcastData.role.Equals(data.newRole) || broadcastData.role.roleID == "all") continue;
                     
                     ev.Target.Broadcast(5, broadcastData.message);
                 }
 
                 foreach (var hintData in scriptData.hint)
                 {
-                    if (!hintData.role.Equals(data.newRole)) continue;
+                    if (!hintData.role.Equals(data.newRole) || hintData.role.roleID == "all") continue;
                     
                     ev.Target.ShowHint(hintData.message, 5);
                 }
@@ -341,11 +341,6 @@ namespace EasyEvents
                 {
                     player.Broadcast(5, broadcastData.message);
                 }
-                
-                if (broadcastData.role.roleID == "all")
-                {
-                    dataObj.broadcast.Remove(broadcastData);
-                }
             }
         }
         
@@ -356,11 +351,6 @@ namespace EasyEvents
                 foreach (var player in hintData.role.GetMembers())
                 {
                     player.ShowHint(hintData.message, 5);
-                }
-
-                if (hintData.role.roleID == "all")
-                {
-                    dataObj.hint.Remove(hintData);
                 }
             }
         }
