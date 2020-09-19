@@ -14,7 +14,7 @@ namespace EasyEvents.Commands
             var _fixedName = args[0].Trim().ToUpper();
             var HCZOnly = false;
             if (_fixedName == "HCZ") HCZOnly = true;
-            else if (_fixedName != "LCZ") throw new InvalidArgumentException("Invalid argument for command \"lights\" on line "+i+", argument 0. Expected \"LCZ/HCZ\" but got \""+args[0]+"\".");
+            else if (_fixedName != "ALL") throw new InvalidArgumentException("Invalid argument for command \"lights\" on line "+i+", argument 0. Expected \"HCZ/ALL\" but got \""+args[0]+"\".");
             
             if(!int.TryParse(args[1].Trim(), out var time)) throw new InvalidArgumentException("Invalid argument for command \"lights\" on line "+i+", argument 1. Expected \"INT\" but got \""+args[1]+"\".");
 
