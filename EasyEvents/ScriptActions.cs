@@ -167,14 +167,14 @@ namespace EasyEvents
                 {
                     if (!broadcastData.role.Equals(data.newRole) || broadcastData.role.roleID == "all") continue;
                     
-                    ev.Target.Broadcast(5, broadcastData.message);
+                    ev.Target.Broadcast((ushort) broadcastData.duration, broadcastData.message);
                 }
 
                 foreach (var hintData in scriptData.hint)
                 {
                     if (!hintData.role.Equals(data.newRole) || hintData.role.roleID == "all") continue;
                     
-                    ev.Target.ShowHint(hintData.message, 5);
+                    ev.Target.ShowHint(hintData.message, hintData.duration);
                 }
             }
         }
