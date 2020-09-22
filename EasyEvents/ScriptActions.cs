@@ -213,6 +213,10 @@ namespace EasyEvents
                         Timing.RunCoroutine(DoDelayedAction(delay));
                     }
                 }
+                else
+                {
+                    scriptData.Add(dataObj);
+                }
             }
             catch (Exception e)
             {

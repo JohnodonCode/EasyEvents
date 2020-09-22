@@ -38,5 +38,20 @@ namespace EasyEvents
         {
             
         }
+
+        public void Add(ScriptActionsStore data)
+        {
+            this.teleportIds.AddRange(data.teleportIds);
+            this.clearItems.AddRange(data.clearItems);
+            this.giveData.AddRange(data.giveData);
+            this.infectData.AddRange(data.infectData);
+            this.hpData.AddRange(data.hpData);
+            this.sizeData.AddRange(data.sizeData);
+            this.last.AddRange(data.last);
+            this.cassie.AddRange(data.cassie);
+            this.broadcast.AddRange(data.broadcast);
+            this.hint.AddRange(data.hint);
+            this.lights.AddRange(data.lights);
+        }
     }
 }
