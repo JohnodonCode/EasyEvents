@@ -339,7 +339,7 @@ namespace EasyEvents
             {
                 foreach (var player in broadcastData.role.GetMembers())
                 {
-                    player.Broadcast(5, broadcastData.message);
+                    player.Broadcast((ushort) broadcastData.duration, broadcastData.message);
                 }
             }
         }
@@ -350,7 +350,7 @@ namespace EasyEvents
             {
                 foreach (var player in hintData.role.GetMembers())
                 {
-                    player.ShowHint(hintData.message, 5);
+                    player.ShowHint(hintData.message, hintData.duration);
                 }
             }
         }

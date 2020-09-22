@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using EasyEvents.Commands;
 
 namespace EasyEvents
@@ -16,8 +17,12 @@ namespace EasyEvents
             for (var i = 0; i < arr.Length; i++)
             {
                 var s = arr[i];
+
+                var args = Regex
+                    .Split(String.Join(" ", s), "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+                    .Where(item => !string.IsNullOrEmpty(item))
+                    .ToList();
                 
-                var args = s.Split(new char[0], StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (args.Count < 1) continue;
                 
                 var cmd = args[0].Trim().ToLower();
