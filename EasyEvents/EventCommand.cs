@@ -11,21 +11,7 @@ namespace EasyEvents
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             var permission = false;
-
-            if (sender is PlayerCommandSender player)
-            {
-                permission = player.CheckPermission("easyevents.use");
-            }
-            else
-            {
-                permission = true;
-            }
-
-            if (!permission)
-            {
-                response = "You do not have permission to run this command.";
-                return true;
-            }
+            var perPermission = false;
 
             if (arguments.Array == null || arguments.Array.Length < 2)
             {
@@ -34,6 +20,29 @@ namespace EasyEvents
             }
 
             var command = arguments.Array[1].Trim().ToLower();
+
+            if (sender is PlayerCommandSender player)
+            {
+                permission = player.CheckPermission("easyevents.use");
+                perPermission = player.CheckPermission("easyevents.event." + command);
+            }
+            else
+            {
+                permission = true;
+                perPermission = true;
+            }
+
+            if (EasyEvents.Singleton.Config.PerEventPermissions && !perPermission)
+            {
+                response = "You do not have permission to run this event.";
+                return true;
+            }
+
+            if (!permission)
+            {
+                response = "You do not have permission to run this command.";
+                return true;
+            }
 
             if (!ScriptStore.Scripts.ContainsKey(command))
             {
