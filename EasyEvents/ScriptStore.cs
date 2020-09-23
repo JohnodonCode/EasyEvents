@@ -33,7 +33,7 @@ namespace EasyEvents
             foreach (var s in list)
             {
                 var text = File.ReadAllText(s);
-                var name = Path.GetFileNameWithoutExtension(s).Trim().ToLower();
+                var name = Path.GetFileNameWithoutExtension(s).Trim().ToLower().Replace(" ", "");
                 
                 Scripts.Add(name, text);
 

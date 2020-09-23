@@ -56,4 +56,15 @@ namespace EasyEvents
         protected EventRunErrorException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+    
+    [Serializable()]
+    public class EventNotFoundException : System.Exception
+    {
+        public EventNotFoundException() : base() { }
+        public EventNotFoundException(string message) : base(message) { }
+        public EventNotFoundException(string message, System.Exception inner) : base(message, inner) { }
+        
+        protected EventNotFoundException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

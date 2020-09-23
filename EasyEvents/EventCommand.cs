@@ -19,7 +19,7 @@ namespace EasyEvents
                 return true;
             }
 
-            var command = arguments.Array[1].Trim().ToLower();
+            var command = arguments.Array[1].Trim().ToLower().Replace(" ", "");
 
             if (sender is PlayerCommandSender player)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Discord;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
@@ -64,6 +65,25 @@ namespace EasyEvents
             
             scriptData = new ScriptActionsStore();
             delays = new Dictionary<int, ScriptActionsStore>();
+
+            Timing.CallDelayed(5f, () =>
+            {
+                try
+                {
+                    if (EasyEvents.Singleton.Config.Events.Count > 0)
+                    {
+                        var selected = EasyEvents.Singleton.Config.Events.PickRandom().Trim().ToLower().Replace(" ", "");
+
+                        if (selected == "none") return;
+                        if (!ScriptStore.Scripts.ContainsKey(selected)) throw new EventNotFoundException("The event \"" + selected + "\" was not found while attempting to automatically run an event.");
+                        ScriptHandler.RunScript(ScriptStore.Scripts[selected]);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
         }
         
         private static void OnRoundStarted()

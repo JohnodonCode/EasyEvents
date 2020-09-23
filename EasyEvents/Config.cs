@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using Exiled.API.Interfaces;
@@ -15,5 +16,8 @@ namespace EasyEvents
 
         [Description("Should each event require a seperate permission (on top of \"easyevents.use\"). If this is enabled, you will need the permission \"easyevents.event.EVENT_NAME\" to run the event \"EVENT_NAME\".")]
         public bool PerEventPermissions { get; set; } = false;
+        
+        [Description("A list of events that can run every round. Useful for event servers. \"None\" can be used to modify probability.")]
+        public List<string> Events { get; set; } = new List<string>();
     }
 }
