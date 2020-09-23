@@ -39,5 +39,10 @@ namespace EasyEvents
                 list.RemoveAt(list.Count - 1);
             }
         }
+        
+        public static List<T> Clone<T>(this List<T> listToClone)
+        {
+            return listToClone.Select(item => item).ToList();
+        }
     }
 }

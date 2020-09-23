@@ -100,7 +100,7 @@ namespace EasyEvents
                 {
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
-                        player.Kill();
+                        player.Kill(DamageTypes.Nuke);
                     }
                 }
 
@@ -110,6 +110,8 @@ namespace EasyEvents
         
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
+            if (ev.Killer.Id == ev.Target.Id || ev.HitInformations.GetDamageType() == DamageTypes.Nuke || scriptData.lastRan) yield break;
+            
             yield return Timing.WaitForSeconds(1f);
 
             foreach (var data in scriptData.infectData)
@@ -228,22 +230,39 @@ namespace EasyEvents
         {
             var players = Player.List.ToList();
             players.Shuffle();
+
+            var playersTemp = players.Clone();
             
             foreach (var data in dataObj.classIds)
             {
                 var num = 0;
                 
-                for (var i = 0; i < players.Count; i++)
+                for (var i = 0; i < playersTemp.Count; i++)
                 {
                     if (random.Next(0, 101) > data.chance && num > data.min) continue;
                     
-                    players[i].SetRole(data.role.GetRole());
-                    CustomRoles.ChangeRole(players[i], data.role.GetCustomRole());
-                    players.RemoveAt(i);
+                    playersTemp[i].SetRole(data.role.GetRole());
+                    CustomRoles.ChangeRole(playersTemp[i], data.role.GetCustomRole());
+                    players.RemoveAll(player => player.Id == playersTemp[i].Id);
                     num++;
                 }
                 
                 players.Shuffle();
+                playersTemp = players.Clone();
+            }
+            
+            playersTemp = players.Clone();
+
+            var spawnData = dataObj.classIds.Where(data => data.chance == 100).ToList();
+            
+            if (spawnData.Count > 0)
+            {
+                for (var i = 0; i < playersTemp.Count; i++)
+                {
+                    playersTemp[i].SetRole(spawnData[0].role.GetRole());
+                    CustomRoles.ChangeRole(playersTemp[i], spawnData[0].role.GetCustomRole());
+                    players.RemoveAll(player => player.Id == playersTemp[i].Id);
+                }
             }
 
             if (dataObj.finalClass != null && players.Count > 0 && dataObj.finalClass.classId != -1)

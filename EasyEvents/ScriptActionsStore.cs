@@ -6,6 +6,8 @@ namespace EasyEvents
     public class ScriptActionsStore
     {
         public bool eventRan = false;
+
+        public bool lastRan = false;
         
         public List<SpawnData> classIds = null;
         public RoleInfo finalClass = null;
