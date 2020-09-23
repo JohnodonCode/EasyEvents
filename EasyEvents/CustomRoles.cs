@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EasyEvents.Integration;
 using Exiled.API.Features;
 
 namespace EasyEvents
@@ -19,6 +20,8 @@ namespace EasyEvents
         {
             if (newRole == null || p == null || !roles.ContainsKey(newRole.id)) return;
             
+            AdvancedSubclassing.RemovePlayer(p);
+            
             if (!users.ContainsKey(p.UserId))
             {
                 users[p.UserId] = newRole.id;
@@ -30,6 +33,11 @@ namespace EasyEvents
                 
                 users[p.UserId] = newRole.id;
                 roles[newRole.id].members.Add(p.UserId);
+            }
+
+            if (newRole.isSubclass)
+            {
+                AdvancedSubclassing.SetClass(p, newRole.id.Substring(2));
             }
         }
     }

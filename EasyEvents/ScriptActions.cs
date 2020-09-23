@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discord;
+using EasyEvents.Integration;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
@@ -62,6 +62,7 @@ namespace EasyEvents
             CustomRoles.users = new Dictionary<string, string>();
             
             CustomRoles.roles.Add("all", new CustomRole("all", 2));
+            AdvancedSubclassing.PopulateCustomRoles();
             
             scriptData = new ScriptActionsStore();
             delays = new Dictionary<int, ScriptActionsStore>();

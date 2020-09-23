@@ -68,6 +68,9 @@
     <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>lib\Mirror.dll</HintPath>
     </Reference>
+    <Reference Include="Subclass-1.0.2, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>lib\Subclass-1.0.2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -95,6 +98,7 @@
     <Compile Include="EasyEvents.cs" />
     <Compile Include="EventCommand.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Integration\AdvancedSubclassing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfo.cs" />
     <Compile Include="ScriptActions.cs" />
