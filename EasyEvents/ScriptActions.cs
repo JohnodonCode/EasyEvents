@@ -100,7 +100,7 @@ namespace EasyEvents
                 {
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
-                        player.Kill(DamageTypes.Nuke);
+                        player.SetRole(RoleType.Spectator);
                     }
                 }
 
