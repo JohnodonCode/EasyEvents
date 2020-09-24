@@ -60,10 +60,9 @@ namespace EasyEvents
         {
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
-            
+
             CustomRoles.roles.Add("all", new CustomRole("all", 2));
-            AdvancedSubclassing.PopulateCustomRoles();
-            
+
             scriptData = new ScriptActionsStore();
             delays = new Dictionary<int, ScriptActionsStore>();
 
@@ -71,6 +70,8 @@ namespace EasyEvents
             {
                 try
                 {
+                    AdvancedSubclassing.PopulateCustomRoles();
+                    
                     if (EasyEvents.Singleton.Config.Events.Count > 0)
                     {
                         var selected = EasyEvents.Singleton.Config.Events.PickRandom().Trim().ToLower().Replace(" ", "");
