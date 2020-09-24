@@ -28,6 +28,11 @@ jobs:
       with:
         file-url: 'https://www.exiled.host/build_deps/References.zip'
         file-name: 'References.zip'
+    
+    - uses: carlosperate/download-file-action@v1.0.3
+      with:
+        file-url: 'https://github.com/steven4547466/AdvancedSubclassing/releases/download/1.0.2/Subclass-1.0.2.dll'
+        file-name: 'Subclass-1.0.2.dll'
 
     - name: Download 7zip
       uses: carlosperate/download-file-action@v1.0.3
@@ -37,6 +42,8 @@ jobs:
 
     - name: Extract Refs
       run: ./7zip.exe e References.zip -oEasyEvents/lib/ -r -y
+    
+    - run: move Subclass-1.0.2.dll EasyEvents/lib/Subclass-1.0.2.dll
 
     - name: Build
       run: msbuild EasyEvents.sln -p:Configuration=release
