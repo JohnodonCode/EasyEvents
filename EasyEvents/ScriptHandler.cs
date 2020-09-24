@@ -10,8 +10,6 @@ namespace EasyEvents
     {
         public static void RunScript(string inputText)
         {
-            ScriptActions.Reset();
-            
             var arr = inputText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             
             for (var i = 0; i < arr.Length; i++)

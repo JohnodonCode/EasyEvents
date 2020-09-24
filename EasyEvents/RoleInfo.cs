@@ -31,7 +31,7 @@ namespace EasyEvents
 
             if (arg.Trim().ToLower().StartsWith("g:") && CustomRoles.roles.ContainsKey(arg.Trim().ToLower()))
             {
-                if(!CustomRoles.roles.TryGetValue(arg.Trim().ToLower(), out role)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
+                if(!CustomRoles.roles.TryGetValue(arg.Trim().ToLower(), out role)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"g:classname\" but got \""+arg+"\".");
                 classId = role.classId;
             }
             else if (arg.Trim().ToLower() == "all")

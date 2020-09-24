@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using Exiled.Loader;
 
 namespace EasyEvents.Integration
 {
@@ -11,11 +12,12 @@ namespace EasyEvents.Integration
         {
             try
             {
-                return Type.GetType("Subclass.API");
+                return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.API");
                 
             }
             catch (Exception e)
             {
+                Log.Error(e);
                 return null;
             }
         }
@@ -25,10 +27,10 @@ namespace EasyEvents.Integration
             var api = GetAPI();
             if (api == null) return;
 
-            var subclasses = (Dictionary<string, Subclass.SubClass>) api.GetMethod("GetClasses")?.Invoke(null, null);
+                var subclasses = (Dictionary<string, Subclass.SubClass>) api.GetMethod("GetClasses")?.Invoke(null, null);
             if (subclasses == null || subclasses.Count < 1) return;
-            
-            foreach (var key in subclasses.Keys)
+
+                foreach (var key in subclasses.Keys)
             {
                 var role = subclasses[key].SpawnsAs;
                 CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) role, true));

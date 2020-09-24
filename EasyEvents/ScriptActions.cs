@@ -66,7 +66,7 @@ namespace EasyEvents
             scriptData = new ScriptActionsStore();
             delays = new Dictionary<int, ScriptActionsStore>();
 
-            Timing.CallDelayed(5f, () =>
+            Timing.CallDelayed(10f, () =>
             {
                 try
                 {
