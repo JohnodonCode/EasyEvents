@@ -124,17 +124,18 @@ namespace EasyEvents
                     {
                         player.SetRole(RoleType.Spectator);
                     }
-                }
 
-                break;
+                    scriptData.lastRan = true;
+                    break;
+                }
             }
         }
         
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
-            if (ev.Killer.Id == ev.Target.Id || ev.HitInformations.GetDamageType() == DamageTypes.Nuke || scriptData.lastRan) yield break;
+            yield return Timing.WaitForSeconds(1.5f);
             
-            yield return Timing.WaitForSeconds(1f);
+            if (scriptData.lastRan) yield break;
 
             foreach (var data in scriptData.infectData)
             {
