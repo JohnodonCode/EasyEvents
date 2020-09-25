@@ -56,8 +56,9 @@ namespace EasyEvents
         public bool Equals(RoleInfo other)
         {
             if (this.roleID == "all" || other.roleID == "all") return true;
-            if (this.GetCustomRole() == null && other.GetCustomRole() == null && other.classId == this.classId) return true;
-            return this.roleID == other.roleID && other.classId == this.classId;
+            if (this.classId != other.classId) return false;
+            if (this.GetCustomRole() == null || other.GetCustomRole() == null) return true;
+            return this.roleID == other.roleID;
         }
 
         public RoleType GetRole()
