@@ -19,5 +19,8 @@ namespace EasyEvents
         
         [Description("A list of events that can run every round. Useful for event servers. \"None\" can be used to modify probability.")]
         public List<string> Events { get; set; } = new List<string>();
+
+        [Description("Send debug messages (will spam console but useful for debugging errors).")]
+        public bool Debug { get; set; } = false;
     }
 }

@@ -50,6 +50,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
             Exiled.Events.Handlers.Warhead.Starting += OnNukeStart;
+            Exiled.Events.Handlers.Player.Escaping += OnEscape;
         }
 
         public static void RemoveEvents()
@@ -60,6 +61,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRoleChange;
             Exiled.Events.Handlers.Warhead.Starting -= OnNukeStart;
+            Exiled.Events.Handlers.Player.Escaping -= OnEscape;
         }
 
         public static void Reset()
@@ -136,6 +138,12 @@ namespace EasyEvents
             Timing.RunCoroutine(LastEscape(ev));
         }
 
+        private static void DebugLog(object message)
+        {
+            if (!EasyEvents.Singleton.Config.Debug) return;
+            Log.Info(message);
+        }
+
         private static IEnumerator<float> LastEscape(EscapingEventArgs ev)
         {
             RoleInfo r = ev.Player.GetRole();
@@ -153,6 +161,9 @@ namespace EasyEvents
                         player.SetRole(RoleType.Spectator);
                         CustomRoles.ChangeRole(player, null);
                     }
+                    
+                    ev.Player.SetRole(RoleType.Tutorial);
+                    CustomRoles.ChangeRole(ev.Player, null);
                 }
             }
         }
@@ -175,6 +186,12 @@ namespace EasyEvents
                         player.SetRole(RoleType.Spectator);
                         CustomRoles.ChangeRole(player, null);
                     }
+
+                    foreach (var player in Player.List.Where(p => p.GetRole().Equals(role)))
+                    {
+                        player.SetRole(RoleType.Tutorial);
+                        CustomRoles.ChangeRole(player, null);
+                    }
                     
                     break;
                 }
@@ -183,15 +200,28 @@ namespace EasyEvents
         
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
+            DebugLog("Infect waiting");
             yield return Timing.WaitForSeconds(2f);
+
+            DebugLog("Infect done waiting");
 
             if (scriptData.lastRan) yield break;
 
             var ran = false;
+
+            DebugLog("Infect running checks");
             
             foreach (var data in scriptData.infectData)
             {
-                if (!data.killedBy.Equals(ev.Killer.GetRole())) continue;
+                if (!data.killedBy.Equals(ev.Killer.GetRole()))
+                {
+                    DebugLog("Role " + data.killedBy.classId + "," + data.killedBy.roleID + " is not equal to " +
+                             ev.Killer.GetRole().classId + "," + ev.Killer.GetRole().roleID + ".");
+                    continue;
+                }
+                
+                DebugLog("Role " + data.killedBy.classId + "," + data.killedBy.roleID + " is equal to " +
+                         ev.Killer.GetRole().classId + "," + ev.Killer.GetRole().roleID + ".");
 
                 ran = true;
 
@@ -200,6 +230,8 @@ namespace EasyEvents
                 ev.Target.SetRole(data.newRole.GetRole());
 
                 CustomRoles.ChangeRole(ev.Target, data.newRole.GetCustomRole());
+
+                DebugLog("Done setting roles");
 
                 yield return Timing.WaitForSeconds(1f);
 
@@ -255,10 +287,13 @@ namespace EasyEvents
                     
                     ev.Target.ShowHint(hintData.message, hintData.duration);
                 }
+
+                DebugLog("Infect done.");
             }
 
             if (!ran)
             {
+                DebugLog("Infect not ran. Resetting player.");
                 CustomRoles.ChangeRole(ev.Target, null);
             }
         }
