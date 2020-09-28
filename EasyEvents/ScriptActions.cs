@@ -48,6 +48,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Player.Died += OnKill;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
+            Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
         }
 
         public static void RemoveEvents()
@@ -56,6 +57,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Player.Died -= OnKill;
             Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
+            Exiled.Events.Handlers.Player.ChangingRole -= OnRoleChange;
         }
 
         public static void Reset()
@@ -102,11 +104,14 @@ namespace EasyEvents
 
         private static void OnKill(DiedEventArgs ev)
         {
-            Timing.RunCoroutine(CheckLast());
-
             if (ev.Killer == null) return;
 
             Timing.RunCoroutine(Infect(ev));
+        }
+
+        private static void OnRoleChange(ChangingRoleEventArgs ev)
+        {
+            Timing.RunCoroutine(CheckLast());
         }
 
         private static void OnDeconText(AnnouncingDecontaminationEventArgs ev)
@@ -127,6 +132,7 @@ namespace EasyEvents
 
             foreach (var role in scriptData.last)
             {
+
                 if (Player.List.Count(p => p.GetRole().Equals(role)) < 2)
                 {
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
