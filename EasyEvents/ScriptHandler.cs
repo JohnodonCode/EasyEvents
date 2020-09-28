@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using EasyEvents.Commands;
@@ -96,6 +95,10 @@ namespace EasyEvents
                     
                     case "disabledetonation":
                         DisableDetonation.Run(args, i);
+                        break;
+                    
+                    case "escape":
+                        Commands.Escape.Run(args, i);
                         break;
                     
                     default:

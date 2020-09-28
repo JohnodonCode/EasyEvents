@@ -38,6 +38,8 @@ namespace EasyEvents
 
         public bool disableNuke = false;
         
+        public List<RoleInfo> escape = new List<RoleInfo>();
+
         public ScriptActionsStore()
         {
             

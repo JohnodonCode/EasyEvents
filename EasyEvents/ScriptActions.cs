@@ -131,9 +131,35 @@ namespace EasyEvents
             ev.IsAllowed = !scriptData.disableNuke;
         }
 
+        private static void OnEscape(EscapingEventArgs ev)
+        {
+            Timing.RunCoroutine(LastEscape(ev));
+        }
+
+        private static IEnumerator<float> LastEscape(EscapingEventArgs ev)
+        {
+            RoleInfo r = ev.Player.GetRole();
+            
+            yield return Timing.WaitForSeconds(1f);
+
+            foreach (var role in scriptData.escape)
+            {
+                if (role.Equals(r))
+                {
+                    scriptData.lastRan = true;
+
+                    foreach (var player in Player.List.Where(p => p.Id != ev.Player.Id))
+                    {
+                        player.SetRole(RoleType.Spectator);
+                        CustomRoles.ChangeRole(player, null);
+                    }
+                }
+            }
+        }
+
         private static IEnumerator<float> CheckLast()
         {
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(1.5f);
 
             if (scriptData.lastRan) yield break;
 
@@ -142,13 +168,14 @@ namespace EasyEvents
 
                 if (Player.List.Count(p => p.GetRole().Equals(role)) < 2)
                 {
+                    scriptData.lastRan = true;
+                    
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
                         player.SetRole(RoleType.Spectator);
                         CustomRoles.ChangeRole(player, null);
                     }
-
-                    scriptData.lastRan = true;
+                    
                     break;
                 }
             }
@@ -156,7 +183,7 @@ namespace EasyEvents
         
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
-            yield return Timing.WaitForSeconds(1.5f);
+            yield return Timing.WaitForSeconds(2f);
 
             if (scriptData.lastRan) yield break;
 

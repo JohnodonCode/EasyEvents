@@ -81,6 +81,7 @@
     <Compile Include="Commands\CreateClass.cs" />
     <Compile Include="Commands\DisableDecontamination.cs" />
     <Compile Include="Commands\DisableDetonation.cs" />
+    <Compile Include="Commands\Escape.cs" />
     <Compile Include="Commands\Give.cs" />
     <Compile Include="Commands\HP.cs" />
     <Compile Include="Commands\Infect.cs" />
