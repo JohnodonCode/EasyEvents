@@ -18,6 +18,8 @@ namespace EasyEvents
         public static ScriptActionsStore scriptData = new ScriptActionsStore();
         
         private static Dictionary<int, ScriptActionsStore> delays = new Dictionary<int, ScriptActionsStore>();
+        
+        private static List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
 
         public static ScriptActionsStore GetDelay(int delay)
         {
@@ -29,7 +31,7 @@ namespace EasyEvents
         {
             yield return Timing.WaitForSeconds(delay);
 
-            Timing.RunCoroutine(RoundStart(delays[delay], false));
+            coroutines.Add(Timing.RunCoroutine(RoundStart(delays[delay], false)));
         }
 
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line, ScriptActionsStore data)
@@ -58,6 +60,11 @@ namespace EasyEvents
 
         public static void Reset()
         {
+            foreach (var coroutine in coroutines)
+            {
+                Timing.KillCoroutines(coroutine);
+            }
+            
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
 
@@ -96,9 +103,9 @@ namespace EasyEvents
         private static void OnKill(DiedEventArgs ev)
         {
             Timing.RunCoroutine(CheckLast());
-            
+
             if (ev.Killer == null) return;
-            
+
             Timing.RunCoroutine(Infect(ev));
         }
 
@@ -116,13 +123,16 @@ namespace EasyEvents
         {
             yield return Timing.WaitForSeconds(1f);
 
+            if (scriptData.lastRan) yield break;
+
             foreach (var role in scriptData.last)
             {
-                if (Player.List.Count(p => p.GetRole().Equals(role)) == 1)
+                if (Player.List.Count(p => p.GetRole().Equals(role)) < 2)
                 {
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
                         player.SetRole(RoleType.Spectator);
+                        CustomRoles.ChangeRole(player, null);
                     }
 
                     scriptData.lastRan = true;
@@ -134,12 +144,16 @@ namespace EasyEvents
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
             yield return Timing.WaitForSeconds(1.5f);
-            
+
             if (scriptData.lastRan) yield break;
 
+            var ran = false;
+            
             foreach (var data in scriptData.infectData)
             {
                 if (!data.killedBy.Equals(ev.Killer.GetRole())) continue;
+
+                ran = true;
 
                 Vector3 oldPos = ev.Target.Position;
                     
@@ -201,6 +215,11 @@ namespace EasyEvents
                     
                     ev.Target.ShowHint(hintData.message, hintData.duration);
                 }
+            }
+
+            if (!ran)
+            {
+                CustomRoles.ChangeRole(ev.Target, null);
             }
         }
         

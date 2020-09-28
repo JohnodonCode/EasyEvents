@@ -55,6 +55,11 @@ namespace EasyEvents
 
         public bool Equals(RoleInfo other)
         {
+            if (this.classId == -1 || other.classId == -1)
+            {
+                Log.Error("A role's classId is -1. This should never be the case and will cause issues.");
+                return false;
+            }
             if (this.roleID == "all" || other.roleID == "all") return true;
             if (this.classId != other.classId) return false;
             if (this.GetCustomRole() == null || other.GetCustomRole() == null) return true;

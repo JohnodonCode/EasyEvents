@@ -68,9 +68,6 @@
     <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>lib\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="Subclass-1.0.2, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>lib\Subclass-1.0.2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />

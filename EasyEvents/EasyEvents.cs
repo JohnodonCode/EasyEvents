@@ -5,6 +5,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Loader;
+using MEC;
 
 namespace EasyEvents
 {
@@ -24,6 +25,7 @@ namespace EasyEvents
             ScriptStore.LoadScripts();
             ScriptActions.AddEvents();
             Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
+            Exiled.Events.Handlers.Server.ReloadedConfigs += OnConfigUpdate;
             ScriptActions.Reset();
         }
         
@@ -34,6 +36,12 @@ namespace EasyEvents
             ScriptStore.Scripts = new Dictionary<string, string>();
             ScriptActions.RemoveEvents();
             Exiled.Events.Handlers.Server.RestartingRound -= ScriptActions.Reset;
+            Exiled.Events.Handlers.Server.ReloadedConfigs -= OnConfigUpdate;
+        }
+
+        private static void OnConfigUpdate()
+        {
+            Timing.CallDelayed(1f, ScriptStore.LoadScripts);
         }
     }
 }

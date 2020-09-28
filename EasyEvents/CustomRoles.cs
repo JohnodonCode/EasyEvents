@@ -18,7 +18,12 @@ namespace EasyEvents
         
         public static void ChangeRole(Player p, CustomRole newRole)
         {
-            if (newRole == null || p == null || !roles.ContainsKey(newRole.id)) return;
+            if (p == null) return;
+            if (newRole == null || !roles.ContainsKey(newRole.id))
+            {
+                if (users.ContainsKey(p.UserId)) users.Remove(p.UserId);
+                return;
+            }
             
             AdvancedSubclassing.RemovePlayer(p);
             

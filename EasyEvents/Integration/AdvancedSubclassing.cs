@@ -17,7 +17,19 @@ namespace EasyEvents.Integration
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                return null;
+            }
+        }
+
+        private static Type GetSubclass()
+        {
+            try
+            {
+                return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.SubClass");
+                
+            }
+            catch (Exception e)
+            {
                 return null;
             }
         }
@@ -27,30 +39,36 @@ namespace EasyEvents.Integration
             var api = GetAPI();
             if (api == null) return;
 
-                var subclasses = (Dictionary<string, Subclass.SubClass>) api.GetMethod("GetClasses")?.Invoke(null, null);
+            var subclasses = (Dictionary<string, object>) api.GetMethod("GetClasses")?.Invoke(null, null);
             if (subclasses == null || subclasses.Count < 1) return;
 
-                foreach (var key in subclasses.Keys)
+            var subclass = GetSubclass();
+            if (subclass == null) return;
+            
+            foreach (var key in subclasses.Keys)
             {
-                var role = subclasses[key].SpawnsAs;
+                var role = subclass.GetField("SpawnAs").GetValue(subclasses[key]);
                 CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) role, true));
             }
         }
 
-        public static List<Player> GetPlayers(string subclass)
+        public static List<Player> GetPlayers(string id)
         {
             var api = GetAPI();
             if (api == null) return new List<Player>();
 
-            var subclasses = ((Dictionary<Player, Subclass.SubClass>) api.GetMethod("GetPlayersWithSubclasses")?.Invoke(null, null));
+            var subclasses = ((Dictionary<Player, object>) api.GetMethod("GetPlayersWithSubclasses")?.Invoke(null, null));
             if (subclasses == null || subclasses.Count < 1) return new List<Player>();
+            
+            var subclass = GetSubclass();
+            if (subclass == null) return new List<Player>();
 
             return Player.List.Where(player =>
             {
                 var val = subclasses.Keys.FirstOrDefault(p => p.Id == player.Id);
                 if (val == null) return false;
                 
-                return subclasses[val].Name == subclass;
+                return (string) subclass.GetField("Name").GetValue(subclasses[val]) == id;
             }).ToList();
         }
 
@@ -67,7 +85,7 @@ namespace EasyEvents.Integration
             var api = GetAPI();
             if (api == null) return;
 
-            var classes = ((Dictionary<string, Subclass.SubClass>) api.GetMethod("GetClasses")?.Invoke(null, null));
+            var classes = ((Dictionary<string, object>) api.GetMethod("GetClasses")?.Invoke(null, null));
             if (classes == null) return;
             if (!classes.ContainsKey(id)) return;
             

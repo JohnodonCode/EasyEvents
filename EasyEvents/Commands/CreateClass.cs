@@ -12,7 +12,7 @@ namespace EasyEvents.Commands
             var customId = "g:"+args[0].Trim().ToLower();
 
             var roleInfo = RoleInfo.parseRole(args[1], "createclass", i, 1);
-            var classId = (int) roleInfo.classId;
+            var classId = roleInfo.classId;
             
             if(classId < 0 || classId > 17) throw new InvalidArgumentException("Invalid argument for command \"createclass\" on line "+i+", argument 1. Expected \"(0-17)\" but got \""+args[1]+"\".");
             
