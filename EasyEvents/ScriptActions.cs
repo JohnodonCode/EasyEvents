@@ -49,6 +49,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
+            Exiled.Events.Handlers.Warhead.Starting += OnNukeStart;
         }
 
         public static void RemoveEvents()
@@ -58,6 +59,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRoleChange;
+            Exiled.Events.Handlers.Warhead.Starting -= OnNukeStart;
         }
 
         public static void Reset()
@@ -122,6 +124,11 @@ namespace EasyEvents
         private static void OnDecon(DecontaminatingEventArgs ev)
         {
             ev.IsAllowed = !scriptData.disableDecontamination;
+        }
+
+        private static void OnNukeStart(StartingEventArgs ev)
+        {
+            ev.IsAllowed = !scriptData.disableNuke;
         }
 
         private static IEnumerator<float> CheckLast()

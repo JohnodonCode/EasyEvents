@@ -35,6 +35,8 @@ namespace EasyEvents
         public List<TextData> hint = new List<TextData>();
         
         public List<LightData> lights = new List<LightData>();
+
+        public bool disableNuke = false;
         
         public ScriptActionsStore()
         {
