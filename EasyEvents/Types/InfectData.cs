@@ -2,13 +2,13 @@
 {
     public class InfectData
     {
-        public RoleInfo killedBy;
+        public RoleInfo oldRole;
         public RoleInfo newRole;
         public bool soft;
 
-        public InfectData(RoleInfo killedBy, RoleInfo newRole, bool soft)
+        public InfectData(RoleInfo oldRole, RoleInfo newRole, bool soft)
         {
-            this.killedBy = killedBy;
+            this.oldRole = oldRole;
             this.newRole = newRole;
             this.soft = soft;
         }

@@ -198,14 +198,40 @@ namespace EasyEvents
             }
         }
         
+        private static readonly List<DamageTypes.DamageType> DisallowedDamage = new List<DamageTypes.DamageType>()
+        {
+            DamageTypes.Contain, 
+            DamageTypes.Decont, 
+            DamageTypes.None, 
+            DamageTypes.Nuke, 
+            DamageTypes.Lure, 
+            DamageTypes.Recontainment, 
+            DamageTypes.FriendlyFireDetector, 
+            DamageTypes.Contain, 
+            DamageTypes.Decont, 
+            DamageTypes.None, 
+            DamageTypes.Nuke, 
+            DamageTypes.Lure,
+            DamageTypes.Recontainment,
+            DamageTypes.FriendlyFireDetector,
+            DamageTypes.Wall,
+            DamageTypes.RagdollLess
+        };
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
+            if (DisallowedDamage.Contains(ev.HitInformations.GetDamageType())) yield break;
+
+            var role = ev.Target.GetRole();
+            
             DebugLog("Infect waiting");
             yield return Timing.WaitForSeconds(2f);
-
             DebugLog("Infect done waiting");
 
-            if (scriptData.lastRan) yield break;
+            if (scriptData.lastRan)
+            {
+                DebugLog("");
+                yield break;
+            }
 
             var ran = false;
 
@@ -213,15 +239,13 @@ namespace EasyEvents
             
             foreach (var data in scriptData.infectData)
             {
-                if (!data.killedBy.Equals(ev.Killer.GetRole()))
+                if (!data.oldRole.Equals(role))
                 {
-                    DebugLog("Role " + data.killedBy.classId + "," + data.killedBy.roleID + " is not equal to " +
-                             ev.Killer.GetRole().classId + "," + ev.Killer.GetRole().roleID + ".");
+                    DebugLog("Role " + data.oldRole.classId + "," + data.oldRole.roleID + " is not equal to " + role.classId + "," + role.roleID + ".");
                     continue;
                 }
                 
-                DebugLog("Role " + data.killedBy.classId + "," + data.killedBy.roleID + " is equal to " +
-                         ev.Killer.GetRole().classId + "," + ev.Killer.GetRole().roleID + ".");
+                DebugLog("Role " + data.oldRole.classId + "," + data.oldRole.roleID + " is equal to " + role.classId + "," + role.roleID + ".");
 
                 ran = true;
 
