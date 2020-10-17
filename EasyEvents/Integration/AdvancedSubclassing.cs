@@ -15,7 +15,7 @@ namespace EasyEvents.Integration
                 return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.API");
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -28,7 +28,7 @@ namespace EasyEvents.Integration
                 return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.SubClass");
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -47,7 +47,7 @@ namespace EasyEvents.Integration
             
             foreach (var key in subclasses.Keys)
             {
-                var role = subclass.GetField("SpawnAs").GetValue(subclasses[key]);
+                var role = subclass.GetField("SpawnsAs").GetValue(subclasses[key]);
                 CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) role, true));
             }
         }
