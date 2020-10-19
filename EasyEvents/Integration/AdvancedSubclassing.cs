@@ -13,9 +13,8 @@ namespace EasyEvents.Integration
             try
             {
                 return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.API");
-                
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
@@ -26,9 +25,8 @@ namespace EasyEvents.Integration
             try
             {
                 return Loader.Plugins.FirstOrDefault(pl => pl.Name == "Subclass")?.Assembly.GetType("Subclass.SubClass");
-                
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
