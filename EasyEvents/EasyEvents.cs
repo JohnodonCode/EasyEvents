@@ -13,7 +13,7 @@ namespace EasyEvents
     {
         public override string Name => "EasyEvents";
         public override string Author => "PintTheDragon";
-        public override Version Version => new Version("1.0.6");
+        public override Version Version => new Version("1.0.7");
         public override PluginPriority Priority => PluginPriority.Last;
 
         public static EasyEvents Singleton;

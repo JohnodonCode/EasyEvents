@@ -46,7 +46,6 @@ namespace EasyEvents
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Player.Died += OnKill;
-            Exiled.Events.Handlers.Map.AnnouncingDecontamination += OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole += OnRoleChange;
             Exiled.Events.Handlers.Warhead.Starting += OnNukeStart;
@@ -57,7 +56,6 @@ namespace EasyEvents
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Player.Died -= OnKill;
-            Exiled.Events.Handlers.Map.AnnouncingDecontamination -= OnDeconText;
             Exiled.Events.Handlers.Map.Decontaminating -= OnDecon;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRoleChange;
             Exiled.Events.Handlers.Warhead.Starting -= OnNukeStart;
@@ -116,11 +114,6 @@ namespace EasyEvents
         private static void OnRoleChange(ChangingRoleEventArgs ev)
         {
             Timing.RunCoroutine(CheckLast());
-        }
-
-        private static void OnDeconText(AnnouncingDecontaminationEventArgs ev)
-        {
-            ev.IsAllowed = !scriptData.disableDecontamination;
         }
 
         private static void OnDecon(DecontaminatingEventArgs ev)
