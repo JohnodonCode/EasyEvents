@@ -73,6 +73,7 @@ namespace EasyEvents
                 ScriptHandler.RunScript(text);
                 response = "Event \"" + command + "\" started successfully";
                 ScriptActions.scriptData.eventRan = true;
+                Loader.Plugins.FirstOrDefault(pl => pl.Name == "ScpStats")?.Assembly?.GetType("SCPStats.EventHandler")?.GetProperty("PauseRound")?.SetValue(null, true);
                 return true;
             }
             catch (Exception e)
