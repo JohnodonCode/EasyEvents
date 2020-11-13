@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 using RemoteAdmin;
+using Exiled.Loader;
 
 namespace EasyEvents
 {
