@@ -373,7 +373,7 @@ namespace EasyEvents
                 
                 for (var i = 0; i < playersTemp.Count; i++)
                 {
-                    if (random.Next(0, 101) > data.chance && num > data.min) continue;
+                    if (random.Next(0, 101) > data.chance || num > data.min) continue;
                     
                     playersTemp[i].SetRole(data.role.GetRole());
                     CustomRoles.ChangeRole(playersTemp[i], data.role.GetCustomRole());
