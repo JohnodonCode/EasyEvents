@@ -17,7 +17,7 @@ namespace EasyEvents.Commands
             {
                 var roleInfo = RoleInfo.parseRole(args[0], "teleport", i, 0);
                 
-                var door = UnityEngine.Object.FindObjectsOfType<DoorVariant>().FirstOrDefault(_door => _door.name.Trim().ToUpper() == args[1].Trim().ToUpper());
+                var door = UnityEngine.Object.FindObjectsOfType<DoorNametagExtension>().FirstOrDefault(_door => _door.GetName.Trim().ToUpper() == args[1].Trim().ToUpper());
                 if(door == null) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument 1. The door name specified is not valid.");
                 
                 if (!PlayerMovementSync.FindSafePosition(door.transform.position, out var pos))
