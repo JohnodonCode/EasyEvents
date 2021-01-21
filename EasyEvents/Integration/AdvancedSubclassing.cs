@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
@@ -37,8 +38,10 @@ namespace EasyEvents.Integration
             var api = GetAPI();
             if (api == null) return;
 
-            var subclasses = (Dictionary<string, object>) api.GetMethod("GetClasses")?.Invoke(null, null);
-            if (subclasses == null || subclasses.Count < 1) return;
+            var dict = (IDictionary) api.GetMethod("GetClasses")?.Invoke(null, null);
+            if (dict == null || dict.Count < 1) return;
+            
+            var subclasses = (Dictionary<string, object>) CastDict(dict).ToDictionary(entry => (string)entry.Key, entry => entry.Value);
 
             var subclass = GetSubclass();
             if (subclass == null) return;
@@ -46,7 +49,15 @@ namespace EasyEvents.Integration
             foreach (var key in subclasses.Keys)
             {
                 var role = subclass.GetField("SpawnsAs").GetValue(subclasses[key]);
-                CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) role, true));
+                CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) (RoleType) role, true));
+            }
+        }
+        
+        private static IEnumerable<DictionaryEntry> CastDict(IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                yield return entry;
             }
         }
 
