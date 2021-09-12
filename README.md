@@ -1,3 +1,5 @@
+This plugin has been ported to Exiled 3.0 by JohnodonCode. This was originally created by PintTheDragon.
+
 # EasyEvents
 EasyEvents is a plugin to let you easily create simple-to-use and powerful events for your server. It works by letting you create event scripts/profiles. These scripts are lists of simple commands that will modify the game. For example, you can change the spawn rates for certain roles, detonate the warhead, teleport roles to certain locations, and more. EasyEvents aims to automate all of the work that goes into running events, and allows you to create events that would be difficult to do manually. To learn how to create custom events, check out the [Wiki](https://github.com/PintTheDragon/EasyEvents/wiki).
 
