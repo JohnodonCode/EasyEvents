@@ -26,6 +26,8 @@ namespace EasyEvents
 
         public List<SizeData> sizeData = new List<SizeData>();
         
+        public List<DoorData> doorData = new List<DoorData>();
+
         public bool disableDecontamination = false;
 
         public List<RoleInfo> last = new List<RoleInfo>();
