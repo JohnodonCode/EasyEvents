@@ -29,6 +29,10 @@ namespace EasyEvents
 
                 switch (cmd)
                 {
+                    case "door":
+                        Door.Run(args, i);
+                        break;
+
                     case "spawn":
                         Spawn.Run(args, i);
                         break;
