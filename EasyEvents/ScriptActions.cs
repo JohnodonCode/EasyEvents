@@ -336,6 +336,7 @@ namespace EasyEvents
                 RunBroadcasts(dataObj);
                 RunHints(dataObj);
                 RunLights(dataObj);
+                RunDoors(dataObj);
 
                 if (dataObj.detonate)
                 {
@@ -517,6 +518,38 @@ namespace EasyEvents
             foreach (var lightData in dataObj.lights)
             {
                 Map.TurnOffAllLights(lightData.time, lightData.HCZOnly);
+            }
+        }
+
+        private static void RunDoors(ScriptActionsStore dataObj)
+        {
+            foreach (var doorData in dataObj.doorData)
+            {
+                foreach(Door door in doorData.doors)
+                {
+                    switch (doorData.action)
+                    {
+                        case "break":
+                        case "destroy":
+                            door.BreakDoor();
+                            break;
+                        case "open":
+                            door.IsOpen = true;
+                            break;
+                        case "close":
+                            door.IsOpen = false;
+                            break;
+                        case "lock":
+                            door.ChangeLock(DoorLockType.DecontLockdown);
+                            break;
+                        case "unlock":
+                            door.ChangeLock(DoorLockType.None);
+                            break;
+                        default:
+                            throw new InvalidArgumentException("Invalid argument for command \"door\" on line " + doorData.i + ", argument 1. \"" + doorData.action + "\" is not a valid door action.");
+                    }
+                }
+                
             }
         }
     }
