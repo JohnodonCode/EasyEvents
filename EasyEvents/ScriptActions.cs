@@ -92,7 +92,7 @@ namespace EasyEvents
                         if (!ScriptStore.Scripts.ContainsKey(selected)) throw new EventNotFoundException("The event \"" + selected + "\" was not found while attempting to automatically run an event.");
                         ScriptHandler.RunScript(ScriptStore.Scripts[selected]);
 
-                        ScriptActions.scriptData.eventRan = true;
+                        scriptData.eventRan = true;
                         Loader.Plugins.FirstOrDefault(pl => pl.Name == "SCPStats")?.Assembly?.GetType("SCPStats.EventHandler")?.GetField("PauseRound")?.SetValue(null, true);
                     }
                 }
