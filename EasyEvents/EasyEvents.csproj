@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="API\Actions.cs" />
+    <Compile Include="API\EventArgs\StartingEventEventArgs.cs" />
+    <Compile Include="API\Events.cs" />
     <Compile Include="Commands\ClearItems.cs" />
     <Compile Include="Commands\CreateClass.cs" />
     <Compile Include="Commands\DisableDecontamination.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="ScriptHandler.cs" />
     <Compile Include="ScriptStore.cs" />
     <Compile Include="Types\DoorData.cs" />
+    <Compile Include="Types\EventData.cs" />
     <Compile Include="Types\GiveData.cs" />
     <Compile Include="Types\HPData.cs" />
     <Compile Include="Types\InfectData.cs" />
@@ -319,6 +323,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

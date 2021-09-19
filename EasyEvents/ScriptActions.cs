@@ -9,6 +9,7 @@ using Exiled.API.Features;
 using MEC;
 using UnityEngine;
 using Random = System.Random;
+using Exiled.Loader;
 
 namespace EasyEvents
 {

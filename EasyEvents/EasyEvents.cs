@@ -6,6 +6,8 @@ using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Loader;
 using MEC;
+using EasyEvents.Handlers;
+using EasyEvents.API.EventArgs;
 
 namespace EasyEvents
 {
@@ -27,6 +29,12 @@ namespace EasyEvents
             Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
             Exiled.Events.Handlers.Server.ReloadedConfigs += OnConfigUpdate;
             ScriptActions.Reset();
+            Events.StartingEvent += StartingEvent;
+        }
+        public static void StartingEvent(StartingEventEventArgs ev)
+        {
+            Log.Debug(ev.eventData.EventText);
+            if(ev.eventData.EventName == "hideandseek") ev.IsAllowed = false;
         }
         
         public override void OnDisabled()
