@@ -9,7 +9,7 @@ namespace EasyEvents.Handlers
     /// </summary>
     public static class Events
     {
-        /// <inheritdoc cref="UsingKeycardEventArgs"/>
+        /// <inheritdoc cref="StartingEventEventArgs"/>
         public static event CustomEventHandler<StartingEventEventArgs> StartingEvent;
 
         /// <summary>
