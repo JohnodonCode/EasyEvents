@@ -127,6 +127,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\0Harmony.dll</HintPath>
@@ -134,6 +137,17 @@
     <Reference Include="Accessibility" />
     <Reference Include="AmplifyBloom">
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\AmplifyBloom.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp_publicized">
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\BouncyCastle.Crypto.dll</HintPath>
@@ -147,6 +161,37 @@
     </Reference>
     <Reference Include="DissonanceVoip">
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\DissonanceVoip.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.API, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.API.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.CreditTags, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.CreditTags.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.CustomItems, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.CustomItems.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.CustomRoles">
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.CustomRoles.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Events, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Loader, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Permissions, Version=3.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks.Win64">
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\Facepunch.Steamworks.Win64.dll</HintPath>
@@ -509,11 +554,14 @@
       <HintPath>C:\Users\johnj\Documents\Assemblies\EXILED3\zxing.unity.dll</HintPath>
     </Reference>
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
+=======
+>>>>>>> 2a65d91 (Fix all your problems)
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

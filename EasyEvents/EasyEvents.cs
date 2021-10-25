@@ -29,7 +29,6 @@ namespace EasyEvents
             Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
             Exiled.Events.Handlers.Server.ReloadedConfigs += OnConfigUpdate;
             ScriptActions.Reset();
-            Events.StartingEvent += StartingEvent;
         }
         public static void StartingEvent(StartingEventEventArgs ev)
         {
