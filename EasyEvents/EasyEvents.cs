@@ -29,14 +29,8 @@ namespace EasyEvents
             Exiled.Events.Handlers.Server.RestartingRound += ScriptActions.Reset;
             Exiled.Events.Handlers.Server.ReloadedConfigs += OnConfigUpdate;
             ScriptActions.Reset();
-            Events.StartingEvent += StartingEvent;
         }
-        public static void StartingEvent(StartingEventEventArgs ev)
-        {
-            Log.Debug(ev.eventData.EventText);
-            if(ev.eventData.EventName == "hideandseek") ev.IsAllowed = false;
-        }
-        
+
         public override void OnDisabled()
         {
             base.OnDisabled();

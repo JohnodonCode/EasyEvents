@@ -20,7 +20,11 @@ namespace EasyEvents
 
             if (arguments.Array == null || arguments.Array.Length < 2)
             {
-                response = "Usage: event <event name>";
+                response = "Usage: event <event name>\nPossible Events:";
+                foreach (var Event in ScriptStore.Scripts)
+                {
+                    response += $"\n{Event.Key}";
+                }
                 return true;
             }
 
@@ -89,7 +93,7 @@ namespace EasyEvents
                     return true;
                 } else
                 {
-                    response = "Event was not allowed.";
+                    response = "Event could not be run. This may be caused by another plugin.";
                     return false;
                 }
                 
