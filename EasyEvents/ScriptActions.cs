@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using UnityEngine;
 using Random = System.Random;
+using Exiled.Loader;
 
 namespace EasyEvents
 {
@@ -38,8 +39,17 @@ namespace EasyEvents
         {
             if (data.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
+            DebugLog($"Spawning... Class IDs: {_classIds}");
             data.classIds = _classIds;
             data.finalClass = _finalClass;
+            foreach (var item in _classIds)
+            {
+                Log.Info(item);
+            }
+            foreach (var item in _classIds)
+            {
+                Log.Info(item);
+            }
         }
 
         public static void AddEvents()
@@ -90,6 +100,9 @@ namespace EasyEvents
                         if (selected == "none") return;
                         if (!ScriptStore.Scripts.ContainsKey(selected)) throw new EventNotFoundException("The event \"" + selected + "\" was not found while attempting to automatically run an event.");
                         ScriptHandler.RunScript(ScriptStore.Scripts[selected]);
+
+                        scriptData.eventRan = true;
+                        Loader.Plugins.FirstOrDefault(pl => pl.Name == "SCPStats")?.Assembly?.GetType("SCPStats.EventHandler")?.GetField("PauseRound")?.SetValue(null, true);
                     }
                 }
                 catch (Exception e)
@@ -100,7 +113,8 @@ namespace EasyEvents
         }
         
         private static void OnRoundStarted()
-        { 
+        {
+            DebugLog("Round Started");
             Timing.RunCoroutine(RoundStart(scriptData, true));
         }
 
@@ -134,7 +148,7 @@ namespace EasyEvents
         private static void DebugLog(object message)
         {
             if (!EasyEvents.Singleton.Config.Debug) return;
-            Log.Info(message);
+            Log.Debug(message);
         }
 
         private static IEnumerator<float> LastEscape(EscapingEventArgs ev)
@@ -317,10 +331,12 @@ namespace EasyEvents
         
         private static IEnumerator<float> RoundStart(ScriptActionsStore dataObj, bool main)
         {
+            DebugLog("Corutine Started");
             yield return Timing.WaitForSeconds(1f);
-
+            
             if (dataObj.classIds != null && dataObj.classIds.Count > 0)
             {
+                DebugLog("classIds not null, spawning");
                 SetRoles(dataObj);
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -395,6 +411,8 @@ namespace EasyEvents
                 for (var i = 0; i < playersTemp.Count; i++)
                 {
                     playersTemp[i].SetRole(spawnData[0].role.GetRole());
+                    DebugLog(playersTemp[i]);
+                    DebugLog(spawnData[0].role.GetCustomRole());
                     CustomRoles.ChangeRole(playersTemp[i], spawnData[0].role.GetCustomRole());
                     players.RemoveAll(player => player.Id == playersTemp[i].Id);
                 }

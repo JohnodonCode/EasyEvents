@@ -3,7 +3,10 @@ using System.Linq;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 using RemoteAdmin;
+using EasyEvents.Types;
 using Exiled.Loader;
+using EasyEvents.Handlers;
+using EasyEvents.API;
 
 namespace EasyEvents
 {
@@ -17,7 +20,11 @@ namespace EasyEvents
 
             if (arguments.Array == null || arguments.Array.Length < 2)
             {
-                response = "Usage: event <event name>";
+                response = "Usage: event <event name>\nPossible Events:";
+                foreach (var Event in ScriptStore.Scripts)
+                {
+                    response += $"\n{Event.Key}";
+                }
                 return true;
             }
 
@@ -33,7 +40,7 @@ namespace EasyEvents
                 permission = true;
                 perPermission = true;
             }
-
+            
             if (EasyEvents.Singleton.Config.PerEventPermissions && !perPermission)
             {
                 response = "You do not have permission to run this event.";
@@ -72,11 +79,24 @@ namespace EasyEvents
 
             try
             {
-                ScriptHandler.RunScript(text);
-                response = "Event \"" + command + "\" started successfully";
-                ScriptActions.scriptData.eventRan = true;
-                Loader.Plugins.FirstOrDefault(pl => pl.Name == "ScpStats")?.Assembly?.GetType("SCPStats.EventHandler")?.GetField("PauseRound")?.SetValue(null, true);
-                return true;
+                EventData eventData = new EventData(text, command);
+                var _ev = new API.EventArgs.StartingEventEventArgs(sender, eventData);
+                
+                Events.OnStartingEvent(_ev);
+
+                if(_ev.IsAllowed)
+                {
+                    ScriptHandler.RunScript(text);
+                    ScriptActions.scriptData.eventRan = true;
+                    Loader.Plugins.FirstOrDefault(pl => pl.Name == "SCPStats")?.Assembly?.GetType("SCPStats.EventHandler")?.GetField("PauseRound")?.SetValue(null, true);
+                    response = "Event \"" + command + "\" started successfully";
+                    return true;
+                } else
+                {
+                    response = "Event could not be run. This may be caused by another plugin.";
+                    return false;
+                }
+                
             }
             catch (Exception e)
             {

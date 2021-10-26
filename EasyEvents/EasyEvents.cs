@@ -6,15 +6,17 @@ using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Loader;
 using MEC;
+using EasyEvents.Handlers;
+using EasyEvents.API.EventArgs;
 
 namespace EasyEvents
 {
     public class EasyEvents : Plugin<Config>
     {
         public override string Name => "EasyEvents";
-        public override string Author => "PintTheDragon";
-        public override Version Version => new Version("1.0.7");
-        public override PluginPriority Priority => PluginPriority.Last;
+        public override string Author => "Johnodon";
+        public override Version Version => new Version(2, 0, 1);
+        public override Version RequiredExiledVersion { get; } = new Version(3, 0, 0);
 
         public static EasyEvents Singleton;
 
@@ -28,7 +30,7 @@ namespace EasyEvents
             Exiled.Events.Handlers.Server.ReloadedConfigs += OnConfigUpdate;
             ScriptActions.Reset();
         }
-        
+
         public override void OnDisabled()
         {
             base.OnDisabled();

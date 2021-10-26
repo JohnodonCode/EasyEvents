@@ -44,7 +44,6 @@ namespace EasyEvents
                 if(!Enum.TryParse<RoleType>(arg.Trim(), true, out var roleId)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
                 classId = (int) roleId;
             }
-            
             return new RoleInfo(role?.id, classId);
         }
 

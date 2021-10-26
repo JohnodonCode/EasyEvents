@@ -13,7 +13,7 @@ namespace EasyEvents.Commands
         public static void Run(List<string> args, int i)
         {
             if (args.Count < 2) throw new InvalidArgumentLengthException("Expected 2 arguments but got " + args.Count + " for command \"door\" at line " + i + ".");
-            DoorType targetDoorType = DoorType.UnknownDoor;
+            DoorType targetDoorType;
             bool isDoor = Enum.TryParse(args[0], out targetDoorType);
             if (!isDoor)
             {
@@ -22,7 +22,10 @@ namespace EasyEvents.Commands
             else
             {
                 List<Door2> targetDoors = new List<Door2>();
-                targetDoors.Add((Door2)Map.Doors.Where(x => x.Type == targetDoorType));
+                foreach(Door2 door in Map.Doors)
+                {
+                    if (door.Type == targetDoorType) targetDoors.Add(door);
+                }
                 if (args.Count == 3)
                 {
                     if (!int.TryParse(args[2].Trim(), out var delay)) throw new InvalidArgumentException("Invalid argument for command \"door\" on line " + i + ", argument 2. Expected \"INT\" but got \"" + args[2] + "\".");
