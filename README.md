@@ -17,7 +17,7 @@ detonate
 ```
 This text will need to be put in a text file, inside the script directory (which can be found and changed inside the config file). The default directory is inside of the EXILED Config directory, named "EasyEvents" (%APPDATA%\EXILED\Config\EasyEvents on windows).
 
-You can also check out the [Wiki](https://github.com/PintTheDragon/EasyEvents/wiki) for more information on creating events.
+You can also check out the [Wiki](https://github.com/JohnodonCode/EasyEvents/wiki) for more information on creating events.
 
 ## Configuration
 The above section goes into more detail on how to setup scripts. To configure EasyEvents, you can go into EXILED's config file. Currently, you will only be able to change the script directory.
