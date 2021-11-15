@@ -9,6 +9,7 @@ using MEC;
 using UnityEngine;
 using Random = System.Random;
 using Exiled.Loader;
+using Exiled.API.Enums;
 
 namespace EasyEvents
 {
@@ -226,7 +227,7 @@ namespace EasyEvents
         };
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
-            if (DisallowedDamage.Contains(ev.HitInformations.GetDamageType())) yield break;
+            if (DisallowedDamage.Contains(ev.HitInformations.Tool)) yield break;
 
             var role = ev.Target.GetRole();
             
@@ -287,8 +288,7 @@ namespace EasyEvents
                 foreach (var itemData in scriptData.giveData)
                 {
                     if (!itemData.role.Equals(data.newRole)) continue;
-
-                    ev.Target.Inventory.AddNewItem(itemData.item);
+                    ev.Target.AddItem(itemData.item);
                 }
                 
                 foreach (var sizedata in scriptData.sizeData)
@@ -465,7 +465,7 @@ namespace EasyEvents
 
                 foreach (var player in list)
                 {
-                    player.Inventory.AddNewItem(itemData.item);
+                    player.AddItem(itemData.item);
                 }
             }
         }
@@ -535,7 +535,7 @@ namespace EasyEvents
         {
             foreach (var lightData in dataObj.lights)
             {
-                Map.TurnOffAllLights(lightData.time, lightData.HCZOnly);
+                Map.TurnOffAllLights(lightData.time, lightData.HCZOnly ? ZoneType.HeavyContainment : ZoneType.Unspecified);
             }
         }
 
