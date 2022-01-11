@@ -33,7 +33,6 @@ namespace EasyEvents
         public static void StartingEvent(StartingEventEventArgs ev)
         {
             Log.Debug(ev.eventData.EventText);
-            if(ev.eventData.EventName == "hideandseek") ev.IsAllowed = false;
         }
 
         public override void OnDisabled()
