@@ -16,16 +16,16 @@ namespace EasyEvents
     public static class ScriptActions
     {
         private static Random random = new Random();
-        
+
         public static ScriptActionsStore scriptData = new ScriptActionsStore();
-        
+
         private static Dictionary<int, ScriptActionsStore> delays = new Dictionary<int, ScriptActionsStore>();
-        
+
         private static List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
 
         public static ScriptActionsStore GetDelay(int delay)
         {
-            if(!delays.ContainsKey(delay)) delays[delay] = new ScriptActionsStore();
+            if (!delays.ContainsKey(delay)) delays[delay] = new ScriptActionsStore();
             return delays[delay];
         }
 
@@ -38,7 +38,7 @@ namespace EasyEvents
 
         public static void SetCustomSpawn(List<SpawnData> _classIds, RoleInfo _finalClass, int line, ScriptActionsStore data)
         {
-            if (data.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line "+line+": Custom spawns have already been set. Only run the \"spawn\" command once.");
+            if (data.classIds != null) throw new CommandErrorException("Error running command \"spawn\" at line " + line + ": Custom spawns have already been set. Only run the \"spawn\" command once.");
 
             DebugLog($"Spawning... Class IDs: {_classIds}");
             data.classIds = _classIds;
@@ -79,7 +79,7 @@ namespace EasyEvents
             {
                 Timing.KillCoroutines(coroutine);
             }
-            
+
             CustomRoles.roles = new Dictionary<string, CustomRole>();
             CustomRoles.users = new Dictionary<string, string>();
 
@@ -93,7 +93,7 @@ namespace EasyEvents
                 try
                 {
                     AdvancedSubclassing.PopulateCustomRoles();
-                    
+
                     if (EasyEvents.Singleton.Config.Events.Count > 0)
                     {
                         var selected = EasyEvents.Singleton.Config.Events.PickRandom().Trim().ToLower().Replace(" ", "");
@@ -112,7 +112,7 @@ namespace EasyEvents
                 }
             });
         }
-        
+
         private static void OnRoundStarted()
         {
             DebugLog("Round Started");
@@ -155,7 +155,7 @@ namespace EasyEvents
         private static IEnumerator<float> LastEscape(EscapingEventArgs ev)
         {
             RoleInfo r = ev.Player.GetRole();
-            
+
             yield return Timing.WaitForSeconds(1f);
 
             foreach (var role in scriptData.escape)
@@ -169,7 +169,7 @@ namespace EasyEvents
                         player.SetRole(RoleType.Spectator);
                         CustomRoles.ChangeRole(player, null);
                     }
-                    
+
                     ev.Player.SetRole(RoleType.Tutorial);
                     CustomRoles.ChangeRole(ev.Player, null);
                 }
@@ -188,7 +188,7 @@ namespace EasyEvents
                 if (Player.List.Count(p => p.GetRole().Equals(role)) < 2)
                 {
                     scriptData.lastRan = true;
-                    
+
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
                         player.SetRole(RoleType.Spectator);
@@ -200,35 +200,29 @@ namespace EasyEvents
                         player.SetRole(RoleType.Tutorial);
                         CustomRoles.ChangeRole(player, null);
                     }
-                    
+
                     break;
                 }
             }
         }
-        
-        private static readonly List<DamageTypes.DamageType> DisallowedDamage = new List<DamageTypes.DamageType>()
+
+        private static readonly List<DamageType> DisallowedDamage = new List<DamageType>()
         {
-            DamageTypes.Contain, 
-            DamageTypes.Decont, 
-            DamageTypes.None, 
-            DamageTypes.Nuke, 
-            DamageTypes.Lure, 
-            DamageTypes.Recontainment, 
-            DamageTypes.FriendlyFireDetector, 
-            DamageTypes.Contain, 
-            DamageTypes.Decont, 
-            DamageTypes.None, 
-            DamageTypes.Nuke, 
-            DamageTypes.Lure,
-            DamageTypes.Recontainment,
-            DamageTypes.FriendlyFireDetector,
-            DamageTypes.Wall,
-            DamageTypes.RagdollLess
+            DamageType.Decontamination,
+            DamageType.Recontainment,
+            DamageType.Unknown,
+            DamageType.Warhead,
+            DamageType.FriendlyFireDetector,
+            DamageType.SeveredHands,
+            DamageType.Falldown,
+            DamageType.FemurBreaker,
+            DamageType.PocketDimension,
         };
+
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
-            if (DisallowedDamage.Contains(ev.HitInformations.Tool)) yield break;
-
+            if (DisallowedDamage.Contains(ev.Handler.Type)) yield break;
+            
             var role = ev.Target.GetRole();
             
             DebugLog("Infect waiting");
