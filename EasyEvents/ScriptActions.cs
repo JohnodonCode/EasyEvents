@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using EasyEvents.Integration;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
@@ -10,6 +11,7 @@ using UnityEngine;
 using Random = System.Random;
 using Exiled.Loader;
 using Exiled.API.Enums;
+using Vector3 = UnityEngine.Vector3;
 
 namespace EasyEvents
 {
