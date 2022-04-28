@@ -6,7 +6,6 @@ using RemoteAdmin;
 using EasyEvents.Types;
 using Exiled.Loader;
 using EasyEvents.Handlers;
-using EasyEvents.API;
 
 namespace EasyEvents
 {

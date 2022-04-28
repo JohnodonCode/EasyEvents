@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using EasyEvents.Integration;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
 using MEC;
-using UnityEngine;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 using Exiled.Loader;
 using Exiled.API.Enums;
 using Vector3 = UnityEngine.Vector3;
@@ -17,8 +15,6 @@ namespace EasyEvents
 {
     public static class ScriptActions
     {
-        private static Random random = new Random();
-
         public static ScriptActionsStore scriptData = new ScriptActionsStore();
 
         private static Dictionary<int, ScriptActionsStore> delays = new Dictionary<int, ScriptActionsStore>();
@@ -386,7 +382,7 @@ namespace EasyEvents
                 
                 for (var i = 0; i < playersTemp.Count; i++)
                 {
-                    if (random.Next(0, 101) > data.chance || num > data.min) continue;
+                    if (Random.Range(0, 101) > data.chance || num > data.min) continue;
                     
                     playersTemp[i].SetRole(data.role.GetRole());
                     CustomRoles.ChangeRole(playersTemp[i], data.role.GetCustomRole());

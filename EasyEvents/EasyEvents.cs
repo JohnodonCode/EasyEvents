@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Interfaces;
-using Exiled.Loader;
 using MEC;
-using EasyEvents.Handlers;
 using EasyEvents.API.EventArgs;
 
 namespace EasyEvents
