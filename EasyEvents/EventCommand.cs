@@ -6,7 +6,6 @@ using RemoteAdmin;
 using EasyEvents.Types;
 using Exiled.Loader;
 using EasyEvents.Handlers;
-using EasyEvents.API;
 
 namespace EasyEvents
 {
@@ -15,8 +14,8 @@ namespace EasyEvents
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            var permission = false;
-            var perPermission = false;
+            bool permission;
+            bool perPermission;
 
             if (arguments.Array == null || arguments.Array.Length < 2)
             {
@@ -105,8 +104,8 @@ namespace EasyEvents
             }
         }
 
-        public string Command => "event";
-        public string[] Aliases => new string[] {"runevent", "eventrun", "events" };
-        public string Description => "This is the command used to run custom events with EasyEvents.";
+        public string Command { get; } = "event";
+        public string[] Aliases { get; } = {"runevent", "eventrun", "events" };
+        public string Description { get; } = "This is the command used to run custom events with EasyEvents.";
     }
 }

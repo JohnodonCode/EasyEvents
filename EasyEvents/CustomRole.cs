@@ -8,9 +8,9 @@ namespace EasyEvents
     public class CustomRole
     {
         public List<string> members = new List<string>();
-        public string id = null;
+        public string id;
         public int classId = -1;
-        public bool isSubclass = false;
+        public bool isSubclass;
         
         public CustomRole(string id, int classId, bool isSubclass = false)
         {
@@ -21,7 +21,7 @@ namespace EasyEvents
 
         public List<Player> GetMembers()
         {
-            return this.id == "all" ? Player.List.ToList() : this.isSubclass ? AdvancedSubclassing.GetPlayers(id.Substring(2)) : Player.List.Where(p => members.Contains(p.UserId)).ToList();
+            return id == "all" ? Player.List.ToList() : isSubclass ? AdvancedSubclassing.GetPlayers(id.Substring(2)) : Player.List.Where(p => members.Contains(p.UserId)).ToList();
         }
     }
 }
