@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using Exiled.API.Enums;
 using Exiled.API.Features;
 
 namespace EasyEvents
