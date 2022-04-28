@@ -22,7 +22,7 @@ namespace EasyEvents.Commands
             else
             {
                 List<Door2> targetDoors = new List<Door2>();
-                foreach(Door2 door in Door2.List)
+                foreach(Door2 door in Map.Doors)
                 {
                     if (door.Type == targetDoorType) targetDoors.Add(door);
                 }

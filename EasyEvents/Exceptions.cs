@@ -2,67 +2,67 @@
 
 namespace EasyEvents
 {
-    [Serializable]
-    public class InvalidArgumentLengthException : Exception
+    [Serializable()]
+    public class InvalidArgumentLengthException : System.Exception
     {
-        public InvalidArgumentLengthException() { }
+        public InvalidArgumentLengthException() : base() { }
         public InvalidArgumentLengthException(string message) : base(message) { }
-        public InvalidArgumentLengthException(string message, Exception inner) : base(message, inner) { }
+        public InvalidArgumentLengthException(string message, System.Exception inner) : base(message, inner) { }
         
         protected InvalidArgumentLengthException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     
-    [Serializable]
-    public class InvalidArgumentException : Exception
+    [Serializable()]
+    public class InvalidArgumentException : System.Exception
     {
-        public InvalidArgumentException() { }
+        public InvalidArgumentException() : base() { }
         public InvalidArgumentException(string message) : base(message) { }
-        public InvalidArgumentException(string message, Exception inner) : base(message, inner) { }
+        public InvalidArgumentException(string message, System.Exception inner) : base(message, inner) { }
         
         protected InvalidArgumentException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     
-    [Serializable]
-    public class InvalidCommandException : Exception
+    [Serializable()]
+    public class InvalidCommandException : System.Exception
     {
-        public InvalidCommandException() { }
+        public InvalidCommandException() : base() { }
         public InvalidCommandException(string message) : base(message) { }
-        public InvalidCommandException(string message, Exception inner) : base(message, inner) { }
+        public InvalidCommandException(string message, System.Exception inner) : base(message, inner) { }
         
         protected InvalidCommandException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     
-    [Serializable]
-    public class CommandErrorException : Exception
+    [Serializable()]
+    public class CommandErrorException : System.Exception
     {
-        public CommandErrorException() { }
+        public CommandErrorException() : base() { }
         public CommandErrorException(string message) : base(message) { }
-        public CommandErrorException(string message, Exception inner) : base(message, inner) { }
+        public CommandErrorException(string message, System.Exception inner) : base(message, inner) { }
         
         protected CommandErrorException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     
-    [Serializable]
-    public class EventRunErrorException : Exception
+    [Serializable()]
+    public class EventRunErrorException : System.Exception
     {
-        public EventRunErrorException() { }
+        public EventRunErrorException() : base() { }
         public EventRunErrorException(string message) : base(message) { }
-        public EventRunErrorException(string message, Exception inner) : base(message, inner) { }
+        public EventRunErrorException(string message, System.Exception inner) : base(message, inner) { }
         
         protected EventRunErrorException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     
-    [Serializable]
-    public class EventNotFoundException : Exception
+    [Serializable()]
+    public class EventNotFoundException : System.Exception
     {
-        public EventNotFoundException() { }
+        public EventNotFoundException() : base() { }
         public EventNotFoundException(string message) : base(message) { }
-        public EventNotFoundException(string message, Exception inner) : base(message, inner) { }
+        public EventNotFoundException(string message, System.Exception inner) : base(message, inner) { }
         
         protected EventNotFoundException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }

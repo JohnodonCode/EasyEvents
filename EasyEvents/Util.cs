@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 
@@ -22,7 +22,7 @@ namespace EasyEvents
                 return new RoleInfo(role.id, role.classId);
             }
 
-            return new RoleInfo(null, (int) p.Role.Type);
+            return new RoleInfo(null, (int) p.Role);
         }
         
         public static void pop<T>(this List<T> list)
