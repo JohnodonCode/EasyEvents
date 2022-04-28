@@ -13,9 +13,9 @@ namespace EasyEvents
 {
     public class EasyEvents : Plugin<Config>
     {
-        public override string Name => "EasyEvents";
-        public override string Author => "Johnodon";
-        public override Version Version => new Version(4, 0, 0);
+        public override string Name { get; } = "EasyEvents";
+        public override string Author { get; } = "Johnodon";
+        public override Version Version { get; } = new Version(4, 0, 0);
         public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
 
         public static EasyEvents Singleton;
@@ -37,11 +37,11 @@ namespace EasyEvents
 
         public override void OnDisabled()
         {
-            Singleton = null;
             ScriptStore.Scripts = new Dictionary<string, string>();
             ScriptActions.RemoveEvents();
             Exiled.Events.Handlers.Server.RestartingRound -= ScriptActions.Reset;
             Exiled.Events.Handlers.Server.ReloadedConfigs -= OnConfigUpdate;
+            Singleton = null;
             base.OnDisabled();
         }
 
