@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
+using PlayerRoles;
 
 namespace EasyEvents
 {
@@ -41,7 +43,7 @@ namespace EasyEvents
             }
             else
             {
-                if(!Enum.TryParse<RoleType>(arg.Trim(), true, out var roleId)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
+                if(!Enum.TryParse<RoleTypeId>(arg.Trim(), true, out var roleId)) throw new InvalidArgumentException("Invalid argument for command \""+cmd+"\" on line "+line+", argument "+argNum+". Expected \"(0-17)\" but got \""+arg+"\".");
                 classId = (int) roleId;
             }
             return new RoleInfo(role?.id, classId);
@@ -49,7 +51,7 @@ namespace EasyEvents
 
         public List<Player> GetMembers()
         {
-            return this.GetCustomRole() == null ? Player.List.Where(player => player.Role == (RoleType) this.classId).ToList() : this.GetCustomRole().GetMembers();
+            return this.GetCustomRole() == null ? Player.List.Where(player => player.Role == (RoleTypeId) this.classId).ToList() : this.GetCustomRole().GetMembers();
         }
 
         public bool Equals(RoleInfo other)
@@ -65,9 +67,9 @@ namespace EasyEvents
             return this.roleID == other.roleID;
         }
 
-        public RoleType GetRole()
+        public RoleTypeId GetRole()
         {
-            return (RoleType) this.classId;
+            return (RoleTypeId) this.classId;
         }
         
         public static RoleInfo all

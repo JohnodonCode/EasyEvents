@@ -5,11 +5,15 @@ using EasyEvents.Integration;
 using Exiled.Events.EventArgs;
 using EasyEvents.Types;
 using Exiled.API.Features;
+using PlayerRoles;
 using MEC;
 using Random = UnityEngine.Random;
 using Exiled.Loader;
 using Exiled.API.Enums;
 using Vector3 = UnityEngine.Vector3;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Warhead;
+using Exiled.Events.EventArgs.Map;
 
 namespace EasyEvents
 {
@@ -119,7 +123,7 @@ namespace EasyEvents
 
         private static void OnKill(DiedEventArgs ev)
         {
-            if (ev.Killer == null) return;
+            if (ev.Attacker == null) return;
 
             Timing.RunCoroutine(Infect(ev));
         }
@@ -164,11 +168,13 @@ namespace EasyEvents
 
                     foreach (var player in Player.List.Where(p => p.Id != ev.Player.Id))
                     {
-                        player.SetRole(RoleType.Spectator);
+
+                        player.Role.Set(RoleTypeId.Spectator);
                         CustomRoles.ChangeRole(player, null);
+                        
                     }
 
-                    ev.Player.SetRole(RoleType.Tutorial);
+                    ev.Player.Role.Set(RoleTypeId.Tutorial);
                     CustomRoles.ChangeRole(ev.Player, null);
                 }
             }
@@ -189,13 +195,13 @@ namespace EasyEvents
 
                     foreach (var player in Player.List.Where(p => !p.GetRole().Equals(role)))
                     {
-                        player.SetRole(RoleType.Spectator);
+                        player.Role.Set(RoleTypeId.Spectator);
                         CustomRoles.ChangeRole(player, null);
                     }
 
                     foreach (var player in Player.List.Where(p => p.GetRole().Equals(role)))
                     {
-                        player.SetRole(RoleType.Tutorial);
+                        player.Role.Set(RoleTypeId.Tutorial);
                         CustomRoles.ChangeRole(player, null);
                     }
 
@@ -219,9 +225,9 @@ namespace EasyEvents
 
         private static IEnumerator<float> Infect(DiedEventArgs ev)
         {
-            if (DisallowedDamage.Contains(ev.Handler.Type)) yield break;
+            if (DisallowedDamage.Contains(ev.DamageHandler.Type)) yield break;
             
-            var role = ev.Target.GetRole();
+            var role = ev.Player.GetRole();
             
             DebugLog("Infect waiting");
             yield return Timing.WaitForSeconds(2f);
@@ -249,24 +255,24 @@ namespace EasyEvents
 
                 ran = true;
 
-                Vector3 oldPos = ev.Target.Position;
+                Vector3 oldPos = ev.Player.Position;
                     
-                ev.Target.SetRole(data.newRole.GetRole());
+                ev.Player.Role.Set(data.newRole.GetRole());
 
-                CustomRoles.ChangeRole(ev.Target, data.newRole.GetCustomRole());
+                CustomRoles.ChangeRole(ev.Player, data.newRole.GetCustomRole());
 
                 DebugLog("Done setting roles");
 
                 yield return Timing.WaitForSeconds(1f);
 
-                if (data.soft) ev.Target.Position = oldPos;
+                if (data.soft) ev.Player.Position = oldPos;
                 else
                 {
                     foreach (var teleportdata in scriptData.teleportIds)
                     {
                         if (!teleportdata.role.Equals(data.newRole)) continue;
 
-                        ev.Target.Position = teleportdata.pos;
+                        ev.Player.Position = teleportdata.pos;
                     }
                 }
 
@@ -274,41 +280,41 @@ namespace EasyEvents
                 {
                     if (!clearItemsData.Equals(data.newRole)) continue;
                         
-                    ev.Target.ClearInventory();
+                    ev.Player.ClearInventory();
                 }
                     
                 foreach (var itemData in scriptData.giveData)
                 {
                     if (!itemData.role.Equals(data.newRole)) continue;
-                    ev.Target.AddItem(itemData.item);
+                    ev.Player.AddItem(itemData.item);
                 }
                 
                 foreach (var sizedata in scriptData.sizeData)
                 {
                     if (!sizedata.role.Equals(data.newRole)) continue;
                     
-                    ev.Target.Scale = sizedata.scale;
+                    ev.Player.Scale = sizedata.scale;
                 }
                 
                 foreach (var healthData in scriptData.hpData)
                 {
                     if (!healthData.role.Equals(data.newRole)) continue;
                     
-                    ev.Target.Health = healthData.amount;
+                    ev.Player.Health = healthData.amount;
                 }
 
                 foreach (var broadcastData in scriptData.broadcast)
                 {
                     if (!broadcastData.role.Equals(data.newRole) || broadcastData.role.roleID == "all") continue;
                     
-                    ev.Target.Broadcast((ushort) broadcastData.duration, broadcastData.message);
+                    ev.Player.Broadcast((ushort) broadcastData.duration, broadcastData.message);
                 }
 
                 foreach (var hintData in scriptData.hint)
                 {
                     if (!hintData.role.Equals(data.newRole) || hintData.role.roleID == "all") continue;
                     
-                    ev.Target.ShowHint(hintData.message, hintData.duration);
+                    ev.Player.ShowHint(hintData.message, hintData.duration);
                 }
 
                 DebugLog("Infect done.");
@@ -317,7 +323,7 @@ namespace EasyEvents
             if (!ran)
             {
                 DebugLog("Infect not ran. Resetting player.");
-                CustomRoles.ChangeRole(ev.Target, null);
+                CustomRoles.ChangeRole(ev.Player, null);
             }
         }
         
@@ -348,7 +354,7 @@ namespace EasyEvents
 
                 if (dataObj.detonate)
                 {
-                    AlphaWarheadController.Host.StartDetonation();
+                    AlphaWarheadController.Singleton.Start();
                 }
 
                 if (main)
@@ -384,7 +390,7 @@ namespace EasyEvents
                 {
                     if (Random.Range(0, 101) > data.chance || num > data.min) continue;
                     
-                    playersTemp[i].SetRole(data.role.GetRole());
+                    playersTemp[i].Role.Set(data.role.GetRole());
                     CustomRoles.ChangeRole(playersTemp[i], data.role.GetCustomRole());
                     players.RemoveAll(player => player.Id == playersTemp[i].Id);
                     num++;
@@ -402,7 +408,7 @@ namespace EasyEvents
             {
                 for (var i = 0; i < playersTemp.Count; i++)
                 {
-                    playersTemp[i].SetRole(spawnData[0].role.GetRole());
+                    playersTemp[i].Role.Set(spawnData[0].role.GetRole());
                     DebugLog(playersTemp[i]);
                     DebugLog(spawnData[0].role.GetCustomRole());
                     CustomRoles.ChangeRole(playersTemp[i], spawnData[0].role.GetCustomRole());
@@ -417,7 +423,7 @@ namespace EasyEvents
                 
                 foreach (var player in players)
                 {
-                    player.SetRole(role);
+                    player.Role.Set(role);
                     CustomRoles.ChangeRole(player, customRole);
                 }
             }

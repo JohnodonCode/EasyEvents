@@ -2,6 +2,8 @@
 using EasyEvents.API.EventArgs;
 using static Exiled.Events.Events;
 using EasyEvents.API;
+using UnityEngine;
+
 namespace EasyEvents.Handlers
 {
     /// <summary>

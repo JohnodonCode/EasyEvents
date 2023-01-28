@@ -2,14 +2,14 @@
 using System.Linq;
 using CommandSystem;
 using EasyEvents.Types;
-using Exiled.API.Features;
+using Exiled.Events.EventArgs.Interfaces;
 
 namespace EasyEvents.API.EventArgs
 {
     /// <summary>
     /// Contains all the information before an EasyEvents event starts
     /// </summary>
-    public class StartingEventEventArgs : System.EventArgs
+    public class StartingEventEventArgs : IExiledEvent
     {
         /// <inheritdoc/>
         public StartingEventEventArgs(ICommandSender sender, EventData eventdata, bool isAllowed = true)

@@ -10,8 +10,8 @@ namespace EasyEvents
     {
         public override string Name { get; } = "EasyEvents";
         public override string Author { get; } = "Johnodon";
-        public override Version Version { get; } = new Version(4, 0, 1);
-        public override Version RequiredExiledVersion { get; } = new Version(5, 2, 1);
+        public override Version Version { get; } = new Version(5, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(6, 0, 0);
 
         public static EasyEvents Singleton;
 

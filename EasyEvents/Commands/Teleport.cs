@@ -19,11 +19,20 @@ namespace EasyEvents.Commands
                 
                 var door = UnityEngine.Object.FindObjectsOfType<DoorNametagExtension>().FirstOrDefault(_door => _door.GetName.Trim().ToUpper() == args[1].Trim().ToUpper());
                 if(door == null) throw new InvalidArgumentException("Invalid argument for command \"teleport\" on line "+i+", argument 1. The door name specified is not valid.");
-                
-                if (!PlayerMovementSync.FindSafePosition(door.transform.position, out var pos))
-                {
-                    throw new CommandErrorException("No safe position could be found for door \""+door.name+"\".");
-                }
+
+
+                // PlayerMovementSync doesn't exist and I'm too lazy to find an alternative,
+                // so I'm not goint to check if it's safe to teleport :)
+
+                // Also this may teleport people into doors, but until I have a solution this is
+                // what's going to happen
+
+                var pos = door.transform.position;
+
+                // if (!PlayerMovementSync.FindSafePosition(door.transform.position, out var pos))
+                // {
+                //     throw new CommandErrorException("No safe position could be found for door \""+door.name+"\".");
+                // }
 
                 if (args.Count == 3)
                 {

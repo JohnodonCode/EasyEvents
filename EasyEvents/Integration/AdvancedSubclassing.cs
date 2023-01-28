@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.Loader;
+using PlayerRoles;
 
 namespace EasyEvents.Integration
 {
@@ -49,7 +50,7 @@ namespace EasyEvents.Integration
             foreach (var key in subclasses.Keys)
             {
                 var role = subclass.GetField("SpawnsAs").GetValue(subclasses[key]);
-                CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) (RoleType) role, true));
+                CustomRoles.roles.Add("g:"+key, new CustomRole("g:"+key, (int) (RoleTypeId) role, true));
             }
         }
         

@@ -1,11 +1,11 @@
 ﻿using EasyEvents.Handlers;
 using EasyEvents.Types;
-using Exiled.Loader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Exiled.Loader;
 
 namespace EasyEvents.API
 {
