@@ -126,7 +126,7 @@
 		</Reference>
 		<Reference Include="Exiled.Loader, Version=5.2.1.0, Culture=neutral, processorArchitecture=AMD64">
 			<SpecificVersion>False</SpecificVersion>
-			<HintPath>C:\Users\johnj\AppData\Roaming\EXILED\Exiled.Loader.dll</HintPath>
+			<HintPath>$(EXILED_REFERENCES)\Exiled.Loader.dll</HintPath>
 		</Reference>
 		<Reference Include="Exiled.Permissions, Version=5.2.1.0, Culture=neutral, processorArchitecture=AMD64">
 			<SpecificVersion>False</SpecificVersion>
