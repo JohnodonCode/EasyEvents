@@ -510,6 +510,7 @@
 		<Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>M:\SCPSLReferences\UnityEngine.WindModule.dll</HintPath>
+		</Reference>
     <Reference Include="Unity.Mathematics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>M:\SCPSLReferences\Unity.Mathematics.dll</HintPath>
